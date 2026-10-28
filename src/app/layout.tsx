@@ -17,15 +17,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-event="wedding" className="paper-grain">
-      <body className="min-h-screen flex flex-col bg-paper text-ink">
+    <html lang="en" data-event-theme="wedding" data-event="wedding" className="paper-grain">
+      <body className="min-h-screen bg-paper text-ink antialiased">
         <PlanProvider>
-          <Header />
-          <div className="flex-1 flex max-w-7xl w-full mx-auto pb-20 md:pb-8">
+          <div className="flex min-h-screen w-full">
             <Sidebar />
-            <main id="main-content" className="flex-1 p-4 sm:p-6 lg:p-8 overflow-x-hidden" tabIndex={-1}>
-              {children}
-            </main>
+            <div className="flex-1 min-w-0 flex flex-col">
+              <Header />
+              <main
+                id="main-content"
+                className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1240px] w-full mx-auto pb-24 md:pb-12"
+                tabIndex={-1}
+              >
+                {children}
+              </main>
+            </div>
           </div>
           <MobileNav />
         </PlanProvider>

@@ -28,3 +28,4 @@ export const BudgetSchema = z.object({
 
 export type BudgetCategory = z.infer<typeof BudgetCategorySchema>;
 export type Budget = z.infer<typeof BudgetSchema>;
+

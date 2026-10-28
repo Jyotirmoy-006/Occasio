@@ -22,6 +22,29 @@ import {
 
 export const EventTypeSchema = z.enum(EVENT_TYPES);
 
+export const DIETARY_CHIPS = [
+  'Vegetarian',
+  'Non-vegetarian',
+  'Vegan',
+  'Jain',
+  'Halal',
+  'Kosher',
+  'Gluten-free',
+  'Nut-free',
+] as const;
+
+export const AI_PAYLOAD_EXACT_FIELDS = [
+  { field: 'eventType', label: 'Event Type', description: 'wedding, birthday, or community' },
+  { field: 'guestCount', label: 'Guest Count', description: 'Approximate number of attendees' },
+  { field: 'budgetAndCurrency', label: 'Budget Tier & Currency', description: 'Total budget and currency code (e.g. USD)' },
+  { field: 'leadTimeDays', label: 'Lead Time', description: 'Calculated days until event (not exact date)' },
+  { field: 'city', label: 'City / Region', description: 'City/region for regional & seasonal context' },
+  { field: 'style', label: 'Style & Atmosphere', description: 'Desired vibe or theme preferences' },
+  { field: 'dietaryRequirements', label: 'Dietary Selections', description: 'Selected structured dietary restrictions' },
+  { field: 'culturalNeeds', label: 'Cultural Traditions', description: 'Customs or dietary guidelines to respect' },
+  { field: 'priorities', label: 'Planning Priorities', description: 'Top selected priority areas (up to 5)' },
+] as const;
+
 export const OnboardingInputSchema = z.object({
   eventType: EventTypeSchema,
   eventName: z
@@ -49,6 +72,7 @@ export const OnboardingInputSchema = z.object({
   city: z.string().min(1, 'City is required').max(100),
   style: z.string().max(MAX_STYLE_LENGTH).default(''),
   culturalNeeds: z.string().max(MAX_CULTURAL_NEEDS_LENGTH).default(''),
+  dietaryRequirements: z.array(z.string()).default([]),
   priorities: z.array(z.string().max(50)).max(MAX_PRIORITIES).default([]),
 });
 
@@ -77,3 +101,4 @@ export const PlanSchema = z.object({
 export type Plan = z.infer<typeof PlanSchema>;
 export type OnboardingInput = z.infer<typeof OnboardingInputSchema>;
 export type EventType = z.infer<typeof EventTypeSchema>;
+

@@ -47,3 +47,4 @@ export const SUPPORTED_CURRENCIES = [
   'ZAR',
 ] as const;
 export type Currency = (typeof SUPPORTED_CURRENCIES)[number];
+

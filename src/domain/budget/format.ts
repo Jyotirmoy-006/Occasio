@@ -41,13 +41,18 @@ export function formatCurrency(
   minorUnits: number,
   currency: Currency,
   locale?: string,
+  options?: { hideZeroCents?: boolean },
 ): string {
+  const isZeroDecimal = ZERO_DECIMAL_CURRENCIES.has(currency);
   const amount = minorToMajor(minorUnits, currency);
+  const hideCents = options?.hideZeroCents && !isZeroDecimal && minorUnits % 100 === 0;
+  const digits = isZeroDecimal || hideCents ? 0 : 2;
+
   return new Intl.NumberFormat(locale ?? undefined, {
     style: 'currency',
     currency,
-    minimumFractionDigits: ZERO_DECIMAL_CURRENCIES.has(currency) ? 0 : 2,
-    maximumFractionDigits: ZERO_DECIMAL_CURRENCIES.has(currency) ? 0 : 2,
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
   }).format(amount);
 }
 

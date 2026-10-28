@@ -18,7 +18,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const variantStyles = {
-      primary: 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-paper shadow-sm',
+      primary: 'bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-[#FAF7F2] shadow-sm',
       secondary: 'bg-transparent border border-border hover:bg-surface text-ink',
       ghost: 'bg-transparent hover:bg-surface text-ink',
       danger: 'bg-error hover:bg-red-800 text-white shadow-sm',
@@ -58,3 +58,4 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 );
 
 Button.displayName = 'Button';
+

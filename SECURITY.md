@@ -12,6 +12,7 @@ Occasio adheres to defense-in-depth principles across client, server, and AI int
 | **Malicious JSON Import DOS** | Medium | File size strictly capped at 512 KB before parsing. Contents must validate against the comprehensive Zod `PlanSchema` before state hydration. | `src/lib/storage/index.ts`, `src/components/export/ExportModal.tsx` |
 | **Server Resource Exhaustion** | Medium | Per-IP sliding-window rate limiting (LRU cache) on `/api/generate` (60 req/min) and `/api/copilot`. Strict 4 KB payload limit and request timeouts. | `src/lib/rate-limit.ts`, `src/app/api/generate/route.ts` |
 | **Data Privacy & PII Leakage** | High | Local-first persistence. The app never asks for, transmits, or stores user names, phone numbers, or email addresses. All plan data remains in browser `localStorage`. | `src/lib/storage/index.ts`, `src/components/onboarding/OnboardingModal.tsx` |
+| **AI Payload Minimization** | High | Single-source-of-truth transmitted fields list (`AI_PAYLOAD_EXACT_FIELDS`). `eventName` is strictly omitted from AI generation payloads to prevent private event titles or personal identifiers from reaching Gemini endpoints. Verified by automated unit test `tests/unit/ai/payload_privacy.test.ts`. | `src/domain/schemas/plan.ts`, `src/lib/ai/prompts.ts` |
 | **Hallucinated Business Recommendations** | Medium | System instructions explicitly forbid generating real vendor phone numbers, ratings, or prices presented as fact. Domain checklist only produces vendor types. | `src/lib/ai/prompts.ts`, `src/domain/checklist/generate.ts` |
 
 ## 2. Content Security Policy (CSP)
@@ -35,3 +36,4 @@ Current audit status: **0 vulnerabilities**.
 
 - **Rate Limiting Persistence**: The current rate limiter uses an in-memory LRU cache per server instance. In a distributed multi-pod environment (e.g., Kubernetes), this should be backed by Redis or Upstash.
 - **Single-Device Storage**: Because plans are stored in browser `localStorage`, multi-device collaboration requires exporting and importing JSON backup files.
+

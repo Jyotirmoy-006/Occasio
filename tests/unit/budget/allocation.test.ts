@@ -99,3 +99,4 @@ describe('Budget Allocation Domain Logic', () => {
     }
   });
 });
+

@@ -57,3 +57,4 @@ export function ShortcutsModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
     </div>
   );
 }
+

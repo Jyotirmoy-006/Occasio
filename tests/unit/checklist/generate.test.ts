@@ -43,3 +43,4 @@ describe('Vendor Checklist Generation Domain Logic', () => {
     expect(hasDisclaimer).toBe(true);
   });
 });
+

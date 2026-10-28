@@ -14,3 +14,4 @@ All interactions with the Gemini API are executed exclusively from Next.js serve
 - **Positive**: Strict system prompt enforcement that cannot be bypassed or tampered with by client-side modifications.
 - **Positive**: Server-side payload sanitization and prompt-injection defense before prompt construction.
 - **Tradeoff**: Route handlers introduce a small network hop between client and server before reaching Google's AI endpoints. Mitigated by low-overhead streaming and server-side timeouts.
+

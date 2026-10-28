@@ -46,3 +46,4 @@ describe('Prompt Injection Sanitizer', () => {
     expect(sanitizePromptField(valid)).toBe(valid);
   });
 });
+

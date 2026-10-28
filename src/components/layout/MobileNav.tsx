@@ -18,7 +18,7 @@ export function MobileNav() {
 
   return (
     <nav
-      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-paper/95 backdrop-blur-md hairline-t flex items-center justify-around px-2 py-1 h-16"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-paper hairline-t flex items-center justify-around px-2 py-1 h-16 shadow-xs"
       aria-label="Mobile Navigation"
     >
       {navItems.map((item) => {
@@ -41,3 +41,4 @@ export function MobileNav() {
     </nav>
   );
 }
+

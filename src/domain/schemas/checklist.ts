@@ -29,3 +29,4 @@ export const ChecklistSchema = z.object({
 export type ChecklistItem = z.infer<typeof ChecklistItemSchema>;
 export type VendorStatus = z.infer<typeof VendorStatusSchema>;
 export type Checklist = z.infer<typeof ChecklistSchema>;
+

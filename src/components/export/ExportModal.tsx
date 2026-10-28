@@ -17,12 +17,12 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 
-export function ExportModal({ onClose }: { onClose: () => void }) {
+export function ExportModal({ isOpen, onClose }: { isOpen?: boolean; onClose: () => void }) {
   const { plan, setPlan } = usePlan();
   const [importStatus, setImportStatus] = useState<{ success?: boolean; message?: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  if (!plan) return null;
+  if (isOpen === false || !plan) return null;
 
   // Print-friendly view
   const handlePrint = () => {

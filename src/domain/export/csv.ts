@@ -77,3 +77,4 @@ export function exportChecklistCsv(checklist: Checklist, currency: Currency): st
 
   return allLines.join('\r\n');
 }
+

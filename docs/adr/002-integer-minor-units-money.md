@@ -16,3 +16,4 @@ Furthermore, when proportional rebalancing generates fractional minor units, rem
 - **Positive**: Zero floating-point drift across repeated slider adjustments or undo/redo actions.
 - **Positive**: Locale-aware formatting is decoupled from internal arithmetic.
 - **Tradeoff**: Requires conversions (`minorToMajor`, `majorToMinor`) when accepting user text input or serializing to CSV. Handled by pure tested functions in `src/domain/budget/format.ts`.
+

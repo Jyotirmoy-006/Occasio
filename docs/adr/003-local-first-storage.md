@@ -15,3 +15,4 @@ Occasio implements a local-first storage architecture utilizing browser `localSt
 - **Positive**: Offline functionality: existing plans can be reviewed, edited, and printed without an internet connection.
 - **Positive**: Schema versioning guarantees backwards compatibility as domain models evolve.
 - **Tradeoff**: Multi-device synchronization requires manual JSON export/import. Acceptable for single-planner use cases and aligns with the hackathon threat model.
+

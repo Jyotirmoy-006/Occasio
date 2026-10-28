@@ -74,3 +74,4 @@ describe('Storage and Serialization (localStorage)', () => {
     expect(() => importPlanJSON('{ "invalid": true }')).toThrow();
   });
 });
+

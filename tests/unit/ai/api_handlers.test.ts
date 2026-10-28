@@ -77,3 +77,4 @@ describe('API Route Handlers (Generate, Copilot, Health)', () => {
     expect(data.proposedChanges.length).toBeGreaterThan(0);
   });
 });
+

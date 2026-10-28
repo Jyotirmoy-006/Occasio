@@ -31,3 +31,4 @@ export const env = _env.success
     };
 
 export const IS_DEMO_MODE = !env.GEMINI_API_KEY;
+

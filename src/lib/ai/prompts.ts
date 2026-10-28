@@ -122,17 +122,35 @@ export function buildGenerationPrompt(input: OnboardingInput): string {
   const safeCity = sanitizePromptField(input.city, 100);
   const safeStyle = sanitizePromptField(input.style, 200);
   const safeCultural = sanitizePromptField(input.culturalNeeds, 300);
-  const safePriorities = input.priorities
+  const safeDietary = (input.dietaryRequirements || [])
+    .map((d) => sanitizePromptField(d, 50))
+    .join(', ');
+  const safePriorities = (input.priorities || [])
     .map((p) => sanitizePromptField(p, 50))
     .join(', ');
 
+  // Compute lead time in days to avoid sending exact personal calendar dates
+  let leadTimeNote = 'Flexible lead time';
+  try {
+    const eventTime = new Date(input.eventDate).getTime();
+    const nowTime = Date.now();
+    const days = Math.max(1, Math.round((eventTime - nowTime) / (1000 * 60 * 60 * 24)));
+    leadTimeNote = `Approximately ${days} days lead time`;
+  } catch {
+    // fallback
+  }
+
+  // NOTE: eventName is deliberately omitted to protect user privacy.
   return `Generate personalized event planning ideas for the following event:
 
 Event type: ${input.eventType}
+Lead time: ${leadTimeNote}
+Budget tier: ${input.currency} ${Math.round(input.budgetMinorUnits / 100).toLocaleString('en-US')}
 ${delimitField('city', safeCity)}
 ${delimitField('style', safeStyle || 'No specific style preference')}
+${delimitField('dietaryRequirements', safeDietary || 'Standard catering')}
 ${delimitField('culturalNeeds', safeCultural || 'None specified')}
-${delimitField('priorities', safePriorities || 'None specified')}
+${delimitField('priorities', safePriorities || 'Balanced')}
 Guest count: approximately ${input.guestCount}
 
 Respond with a JSON object matching the schema. Keep content ideas concise (under 120 words each). Ensure color palette hex codes are valid. For textColor fields, use "#1C1917" for light swatches and "#FAF7F2" for dark swatches (WCAG AA contrast required).`;

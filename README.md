@@ -12,13 +12,13 @@ flowchart TD
   User["Browser Client (Next.js 16 App Router)"]
   LocalStorage["localStorage Engine\n(Schema-Versioned & Migrations)"]
   ExportEngine["Export Layer\n(RFC 4180 CSV, RFC 5545 ICS, JSON)"]
-  ServerRoutes["Server Route Handlers\n/api/generate & /api/copilot"]
-  GeminiSDK["Google Gemini API (@google/genai)\n(gemini-2.5-flash / gemini-2.0-flash)"]
+  ServerRoutes["Server Route Handlers\n/api/generate & /api/copilot & /api/health"]
+  GeminiSDK["Google Gemini API (@google/genai)\n(gemini-3.5-flash / gemini-3.5-flash-lite / gemini-3.8-flash)"]
   DemoEngine["Deterministic Demo Engine\n(Curated Templates & Fallback)"]
 
   User <--> LocalStorage
   User --> ExportEngine
-  User -->|"POST JSON (Delimited & Sanitized)"| ServerRoutes
+  User -->|"POST JSON (Delimited & Sanitized, No PII/EventName)"| ServerRoutes
   ServerRoutes -->|"Server-Side Only Auth"| GeminiSDK
   GeminiSDK -->|"Response Validation (Zod)"| ServerRoutes
   ServerRoutes -.->|"On 503 / Timeout / No Key"| DemoEngine
@@ -107,8 +107,10 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 | `npm run dev` | Start development server on port 3000 |
 | `npm run build` | Produce optimized Turbopack production build |
 | `npm run start` | Start production server |
-| `npm run test` | Run all 61 Vitest unit and component tests |
+| `npm run test` | Run all 83 Vitest unit and component tests |
 | `npm run test:coverage` | Run test suite with V8 coverage enforcement |
+| `npm run test:contrast` | Mathematically verify WCAG 2.2 AA (≥ 4.5:1) across 48 token pairs |
+| `npm run test:e2e` | Run 14 Playwright E2E tests (geometry, modal fit, keyboard, axe-core) |
 | `npm run type-check` | Run strict TypeScript compiler verification (`tsc --noEmit`) |
 | `npm run size-check` | Fail if tracked repository files exceed 8 MB |
 | `npm audit` | Verify dependencies are free of high-severity vulnerabilities |
@@ -127,11 +129,21 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Measured Performance & Testing Evidence
 
-- **Unit & Component Tests**: **61 passed across 14 test suites** (100% pass rate).
-- **Code Coverage**: **91.1% lines overall**, **97.3% budget logic**, **100% timeline logic**, **100% checklist logic**.
-- **Tracked Repository Size**: **0.44 MB** (well under the 8 MB hard limit).
+- **Unit & Component Tests**: **83 passed across 17 test suites** (100% pass rate).
+- **Playwright E2E Tests**: **14 passed** (covering non-collision shell geometry at 1440/1024/768/360px, horizontal overflow at 320–1440px, modal fit at 1366x768 and 360x640px, keyboard-only milestone toggle/undo, and automated axe-core scans).
+- **Code Coverage**: **91.96% lines overall**, **98.23% budget logic**, **100% timeline logic**, **100% checklist logic**, **100% schema models**, **94.4% functions**.
+- **Lighthouse Mobile Audit (Emulated Mobile)**:
+  - **Performance**: **92** (FCP: 0.8s, LCP: 0.8s, Cumulative Layout Shift: 0, Speed Index: 1.0s)
+  - **Accessibility**: **100**
+  - **Best Practices**: **100**
+  - **SEO**: **100**
+- **Contrast Verification**: **48/48 token pairs passed** (`npm run test:contrast`, all ≥ 4.5:1 against respective backgrounds).
+- **Automated Accessibility Scan**: **0 serious or critical violations** via `@axe-core/playwright` on both Overview dashboard and Onboarding Wizard dialogs.
+- **Tracked Repository Size**: **0.74 MB** (774,305 bytes, 9.2% of the 8 MB hard limit).
 - **Security Audit**: **0 vulnerabilities** via `npm audit --audit-level=high`.
-- **TypeScript**: **0 errors** under `strict: true`.
+- **TypeScript**: **0 errors** under `strict: true` (`tsc --noEmit`).
+- **Verified Live Models**: Tested and verified live with `@google/genai` using model **`gemini-3.5-flash`** (with fallback to `gemini-3.5-flash-lite` and `gemini-3.8-flash`). Deprecated `gemini-2.5-flash` / `gemini-2.0-flash` were replaced.
+- **Privacy Minimization**: Single source of truth payload audit (`AI_PAYLOAD_EXACT_FIELDS`). `eventName` is strictly excluded from prompt payloads to prevent personal data disclosure to AI endpoints.
 
 ---
 

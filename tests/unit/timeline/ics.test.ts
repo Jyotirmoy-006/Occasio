@@ -44,3 +44,4 @@ describe('iCalendar (ICS) Export', () => {
     expect(ics).toContain('DESCRIPTION:Bring notes\\, menus & questions\\; check price.');
   });
 });
+

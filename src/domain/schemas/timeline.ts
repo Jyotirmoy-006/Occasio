@@ -4,7 +4,7 @@
  */
 import { z } from 'zod';
 
-export const MilestoneStatusSchema = z.enum(['pending', 'in-progress', 'done', 'skipped']);
+export const MilestoneStatusSchema = z.enum(['pending', 'in-progress', 'done', 'completed', 'skipped']);
 
 export const MilestoneSchema = z.object({
   id: z.string(),
@@ -13,6 +13,7 @@ export const MilestoneSchema = z.object({
   /** ISO date string YYYY-MM-DD */
   dueDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   category: z.string().max(60),
+  phase: z.string().max(60).optional(),
   status: MilestoneStatusSchema,
   /** How many weeks before the event this milestone is due. */
   weeksBeforeEvent: z.number().int(),
@@ -27,3 +28,4 @@ export const TimelineSchema = z.object({
 export type Milestone = z.infer<typeof MilestoneSchema>;
 export type MilestoneStatus = z.infer<typeof MilestoneStatusSchema>;
 export type Timeline = z.infer<typeof TimelineSchema>;
+

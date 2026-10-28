@@ -3,10 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { Plan } from '@/domain/schemas/plan';
 import { savePlan, loadPlan, loadAllPlans } from '@/lib/storage';
-import { createDefaultBudget } from '@/domain/budget/allocation';
-import { generateTimeline } from '@/domain/timeline/generate';
-import { generateChecklist } from '@/domain/checklist/generate';
-import { getDemoIdeas } from '@/lib/ai/demo-engine';
+import { SAMPLE_PLANS } from '@/domain/sample-plans';
 
 export type PlanTab = 'overview' | 'budget' | 'timeline' | 'checklist' | 'ideas' | 'copilot' | 'compare';
 
@@ -33,28 +30,8 @@ interface PlanContextType {
 
 const PlanContext = createContext<PlanContextType | null>(null);
 
-// Default initial sample plan so real data is visible on first load!
-const DEFAULT_SAMPLE_PLAN: Plan = {
-  id: '7b8f9e01-1234-4567-89ab-cdef01234567',
-  schemaVersion: 1,
-  eventType: 'wedding',
-  eventName: 'Elena & Julian’s Autumn Wedding',
-  eventDate: '2027-10-16',
-  guestCount: 120,
-  budgetMinorUnits: 3200000, // $32,000.00
-  currency: 'USD',
-  city: 'Hudson Valley, NY',
-  style: 'Warm editorial romance with seasonal botanicals',
-  culturalNeeds: 'Vegetarian tasting menu with allergen-aware labeling',
-  priorities: ['Photography & Video', 'Catering & Bar', 'Live Music'],
-  budget: createDefaultBudget('wedding', 3200000),
-  timeline: generateTimeline('wedding', '2027-10-16'),
-  checklist: generateChecklist('wedding'),
-  ideas: getDemoIdeas('wedding'),
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-  isAIGenerated: false,
-};
+// Default initial sample plan (neutral, realistic sample)
+const DEFAULT_SAMPLE_PLAN: Plan = SAMPLE_PLANS.wedding;
 
 export function PlanProvider({ children }: { children: React.ReactNode }) {
   const [allSavedPlans, setAllSavedPlans] = useState<Plan[]>(() => {
@@ -98,10 +75,11 @@ export function PlanProvider({ children }: { children: React.ReactNode }) {
       .catch(() => setIsDemoMode(true));
   }, []);
 
-  // Update HTML data-event attribute to reflect theme
+  // Update HTML data-event and data-event-theme attributes to reflect theme
   useEffect(() => {
     if (plan?.eventType) {
       document.documentElement.setAttribute('data-event', plan.eventType);
+      document.documentElement.setAttribute('data-event-theme', plan.eventType);
     }
   }, [plan?.eventType]);
 

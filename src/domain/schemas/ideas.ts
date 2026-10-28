@@ -37,6 +37,13 @@ export const DayTimelineItemSchema = z.object({
   notes: z.string().max(200).default(''),
 });
 
+export const ProvenanceSchema = z.object({
+  source: z.enum(['gemini', 'demo_engine', 'user_edited']),
+  modelId: z.string().optional(),
+  timestamp: z.string(),
+  label: z.string(),
+});
+
 export const IdeasSchema = z.object({
   themes: z.array(IdeaItemSchema).max(10),
   colorPalettes: z.array(ColorPaletteSchema).max(5),
@@ -44,10 +51,14 @@ export const IdeasSchema = z.object({
   activities: z.array(IdeaItemSchema).max(10),
   decor: z.array(IdeaItemSchema).max(10),
   dayTimeline: z.array(DayTimelineItemSchema).max(20),
+  provenance: ProvenanceSchema.optional(),
 });
+
+export type Provenance = z.infer<typeof ProvenanceSchema>;
 
 export type IdeaItem = z.infer<typeof IdeaItemSchema>;
 export type ColorSwatch = z.infer<typeof ColorSwatchSchema>;
 export type ColorPalette = z.infer<typeof ColorPaletteSchema>;
 export type DayTimelineItem = z.infer<typeof DayTimelineItemSchema>;
 export type Ideas = z.infer<typeof IdeasSchema>;
+

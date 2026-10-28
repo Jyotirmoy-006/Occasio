@@ -246,3 +246,4 @@ export function resizeBudget(budget: Budget, newTotalMinorUnits: number): Budget
     })),
   };
 }
+

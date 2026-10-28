@@ -51,3 +51,4 @@ describe('Budget Allocation Edge Cases & Branch Coverage', () => {
     expect(() => resizeBudget(budget, 10.5)).toThrow(RangeError);
   });
 });
+

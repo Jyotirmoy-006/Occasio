@@ -29,6 +29,7 @@ describe('AI Prompt Templates & Responsible AI Constraints', () => {
       city: 'Portland',
       style: 'Boho Chic <script>alert("hack")</script>',
       culturalNeeds: 'Vegetarian and GF options',
+      dietaryRequirements: ['Vegetarian', 'Gluten-free'],
       priorities: ['Music', 'Food'],
     });
 

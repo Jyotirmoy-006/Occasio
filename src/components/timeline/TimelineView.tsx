@@ -227,6 +227,7 @@ export function TimelineView() {
                       pending: 'in-progress',
                       'in-progress': 'done',
                       done: 'pending',
+                      completed: 'pending',
                       skipped: 'pending',
                     };
                     handleStatusChange(milestone.id, nextMap[milestone.status]);

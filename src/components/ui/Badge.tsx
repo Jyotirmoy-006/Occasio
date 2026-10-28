@@ -25,3 +25,4 @@ export function Badge({ variant = 'neutral', icon, children, className = '' }: B
     </span>
   );
 }
+
