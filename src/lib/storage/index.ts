@@ -149,7 +149,7 @@ export function importPlanJSON(jsonString: string): Plan {
   const result = PlanSchema.safeParse(migrated);
 
   if (!result.success) {
-    throw new Error(`Import validation failed: ${result.error.errors[0]?.message ?? 'Unknown error'}`);
+    throw new Error(`Import validation failed: ${result.error.issues[0]?.message ?? 'Unknown error'}`);
   }
 
   return result.data;

@@ -1,0 +1,82 @@
+:root {
+  /* Editorial Palette: Warm paper, deep ink, tactile tones */
+  --color-paper: #FAF7F2;
+  --color-ink: #1C1917;
+  --color-ink-muted: #6B635B; /* 4.6:1 WCAG AA contrast against #FAF7F2 */
+  --color-ink-subtle: #8C827A;
+  --color-border: #E5DDD5;
+  --color-border-dark: #D4C7BA;
+  --color-surface: #F5EFE6;
+  --color-surface-raised: #EDE4D8;
+
+  /* Confident accents */
+  --color-accent-green: #2D5016; /* 8.2:1 contrast against #FAF7F2 */
+  --color-accent-green-hover: #223D11;
+  --color-accent-terra: #8B4513; /* 6.4:1 contrast */
+  --color-accent-terra-hover: #70360D;
+  --color-accent-gold: #996515;
+
+  /* Default accent (Wedding: deep forest green) */
+  --color-accent: var(--color-accent-green);
+  --color-accent-hover: var(--color-accent-green-hover);
+  --color-accent-subtle: rgba(45, 80, 22, 0.08);
+
+  /* Status Colors (WCAG AA compliant against #FAF7F2) */
+  --color-success: #1E6B37;
+  --color-success-bg: #E8F5EC;
+  --color-warning: #944A00;
+  --color-warning-bg: #FEF3E2;
+  --color-error: #A82020;
+  --color-error-bg: #FDF0F0;
+
+  /* Typography */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-ui: 'Geist', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', monospace;
+
+  /* Spacing Scale (8px rhythm) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Event-type subtle theme switches */
+[data-event='wedding'] {
+  --color-accent: #2D5016;
+  --color-accent-hover: #223D11;
+  --color-accent-subtle: rgba(45, 80, 22, 0.08);
+}
+
+[data-event='birthday'] {
+  --color-accent: #8B4513;
+  --color-accent-hover: #70360D;
+  --color-accent-subtle: rgba(139, 69, 19, 0.08);
+}
+
+[data-event='community'] {
+  --color-accent: #1B4D3E;
+  --color-accent-hover: #13392E;
+  --color-accent-subtle: rgba(27, 77, 62, 0.08);
+}
+
+/* Accessibility: Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms !important;
+    --duration-normal: 0ms !important;
+    --duration-slow: 0ms !important;
+  }
+}

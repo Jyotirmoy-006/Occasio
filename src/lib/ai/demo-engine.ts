@@ -111,7 +111,7 @@ const DEMO_IDEAS: Record<EventType, DemoIdeas> = {
     ],
     decor: [
       { id: 'b-decor-1', content: 'Balloon arch in two-tone neutral palette — modern, not childish.', pinned: false, dismissed: false, isAIGenerated: false },
-      { id: 'b-decor-2', content: 'Gallery wall of photos from the person's life — guests contribute via a shared album link.', pinned: false, dismissed: false, isAIGenerated: false },
+      { id: 'b-decor-2', content: "Gallery wall of photos from the person's life — guests contribute via a shared album link.", pinned: false, dismissed: false, isAIGenerated: false },
     ],
     dayTimeline: [
       { id: 'b-day-1', time: '14:00', label: 'Guests arrive', duration: '30 min', notes: 'Welcome drinks ready.' },
@@ -151,7 +151,7 @@ const DEMO_IDEAS: Record<EventType, DemoIdeas> = {
     activities: [
       { id: 'c-act-1', content: 'Live music showcase featuring local performers — open call for community talent.', pinned: false, dismissed: false, isAIGenerated: false },
       { id: 'c-act-2', content: 'Interactive mural or community art installation that attendees contribute to during the event.', pinned: false, dismissed: false, isAIGenerated: false },
-      { id: 'c-act-3', content: 'Kids' area with supervised activities — encourages family attendance and inclusivity.', pinned: false, dismissed: false, isAIGenerated: false },
+      { id: 'c-act-3', content: "Kids' area with supervised activities — encourages family attendance and inclusivity.", pinned: false, dismissed: false, isAIGenerated: false },
     ],
     decor: [
       { id: 'c-decor-1', content: 'Sustainable bunting from recycled fabric — involve community members in making it.', pinned: false, dismissed: false, isAIGenerated: false },
