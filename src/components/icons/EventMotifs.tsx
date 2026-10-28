@@ -1,7 +1,7 @@
 import React from 'react';
 import type { EventType } from '@/domain/schemas/plan';
 
-/** Hand-crafted editorial SVGs for event type motifs and decorative dividers. */
+/** Hand-crafted editorial SVGs for event type motifs, corner flourishes, and stationery frames. */
 
 export function WeddingMotif({ className = 'w-6 h-6' }: { className?: string }) {
   return (
@@ -128,5 +128,63 @@ export function OrnamentalDivider({
 
       <div className="h-px bg-border flex-1 max-w-[140px]" />
     </div>
+  );
+}
+
+/**
+ * Stationery Corner Flourish engraving.
+ * Positioned in corners of the Hero band and key invitation cards.
+ */
+export function CornerFlourish({
+  position = 'top-left',
+  eventType = 'wedding',
+  className = 'w-6 h-6',
+}: {
+  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  eventType?: EventType;
+  className?: string;
+}) {
+  const rotation =
+    position === 'top-right'
+      ? 'rotate-90'
+      : position === 'bottom-right'
+      ? 'rotate-180'
+      : position === 'bottom-left'
+      ? '-rotate-90'
+      : '';
+
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`${className} ${rotation} pointer-events-none select-none`}
+      aria-hidden="true"
+    >
+      {eventType === 'wedding' && (
+        <>
+          <path d="M2 22V6C2 3.79 3.79 2 6 2H22" />
+          <path d="M6 6C6 8 8 10 10 10" />
+          <circle cx="6" cy="6" r="1" fill="currentColor" />
+        </>
+      )}
+      {eventType === 'birthday' && (
+        <>
+          <path d="M2 22V6C2 3.79 3.79 2 6 2H22" />
+          <polygon points="6,6 9,8 7,11 4,9" fill="none" />
+          <line x1="2" y1="2" x2="6" y2="6" />
+        </>
+      )}
+      {eventType === 'community' && (
+        <>
+          <path d="M2 22V6C2 3.79 3.79 2 6 2H22" />
+          <circle cx="6" cy="6" r="2" />
+          <path d="M8 8L12 12" />
+        </>
+      )}
+    </svg>
   );
 }

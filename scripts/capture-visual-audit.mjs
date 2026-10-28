@@ -23,21 +23,24 @@ async function capture() {
 
   for (const theme of THEMES) {
     for (const vp of VIEWPORTS) {
-      await page.setViewportSize({ width: vp.width, height: vp.height });
-      await page.goto('http://localhost:3000');
-      await page.waitForLoadState('networkidle');
+      for (const decMode of ['rich', 'reduced']) {
+        await page.setViewportSize({ width: vp.width, height: vp.height });
+        await page.goto('http://localhost:3000');
+        await page.waitForLoadState('networkidle');
 
-      // Set the theme attribute
-      await page.evaluate((t) => {
-        document.documentElement.setAttribute('data-event-theme', t);
-        document.documentElement.setAttribute('data-event', t);
-      }, theme);
+        // Set the theme and decoration attributes
+        await page.evaluate(({ t, d }) => {
+          document.documentElement.setAttribute('data-event-theme', t);
+          document.documentElement.setAttribute('data-event', t);
+          document.documentElement.setAttribute('data-reduce-decoration', d === 'reduced' ? 'true' : 'false');
+        }, { t: theme, d: decMode });
 
-      await page.waitForTimeout(300);
+        await page.waitForTimeout(300);
 
-      const filename = path.join(SCREENSHOT_DIR, `${theme}-${vp.name}-${vp.width}.png`);
-      await page.screenshot({ path: filename, fullPage: false });
-      console.log(`Saved: ${filename}`);
+        const filename = path.join(SCREENSHOT_DIR, `${theme}-${decMode}-${vp.name}-${vp.width}.png`);
+        await page.screenshot({ path: filename, fullPage: false });
+        console.log(`Saved: ${filename}`);
+      }
     }
   }
 
@@ -49,3 +52,4 @@ capture().catch((err) => {
   console.error('Visual capture error:', err);
   process.exit(1);
 });
+

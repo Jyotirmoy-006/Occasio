@@ -22,6 +22,17 @@ export function ExportModal({ isOpen, onClose }: { isOpen?: boolean; onClose: ()
   const [importStatus, setImportStatus] = useState<{ success?: boolean; message?: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  React.useEffect(() => {
+    if (isOpen === false) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (isOpen === false || !plan) return null;
 
   // Print-friendly view

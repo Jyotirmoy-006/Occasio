@@ -652,7 +652,7 @@ export function OnboardingModal({ isOpen, onClose }: OnboardingModalProps) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Guest Count Stepper */}
                       <div>
-                        <label className="block text-sm font-semibold text-ink mb-1">
+                        <label htmlFor="field-guest-count" className="block text-sm font-semibold text-ink mb-1">
                           Estimated Guest Count <span className="text-red-700">*</span>
                         </label>
                         <div className="flex items-center gap-2">
@@ -665,6 +665,8 @@ export function OnboardingModal({ isOpen, onClose }: OnboardingModalProps) {
                             -
                           </button>
                           <input
+                            id="field-guest-count"
+                            aria-label="Estimated Guest Count"
                             type="number"
                             min="1"
                             max="5000"

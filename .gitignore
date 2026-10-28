@@ -16,7 +16,7 @@
 /playwright-report/
 /screenshots/
 *.report.json
-lighthouse-report.json
+lighthouse*.json
 
 # next.js
 /.next/

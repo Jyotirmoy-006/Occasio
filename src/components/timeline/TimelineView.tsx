@@ -171,6 +171,7 @@ export function TimelineView() {
               className="bg-[var(--color-accent)] h-full transition-all duration-300 rounded-full"
               style={{ width: `${progressPercent}%` }}
               role="progressbar"
+              aria-label="Milestone completion progress"
               aria-valuenow={progressPercent}
               aria-valuemin={0}
               aria-valuemax={100}

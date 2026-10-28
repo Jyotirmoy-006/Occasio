@@ -5,6 +5,17 @@ import { Card } from '@/components/ui/Card';
 import { Keyboard } from 'lucide-react';
 
 export function ShortcutsModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const shortcuts = [

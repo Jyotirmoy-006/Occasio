@@ -1,12 +1,12 @@
-# Accessibility Audit & Compliance Guide (WCAG 2.2 Level AA)
+# Accessibility Verification & Testing Scope (Automated Axe-Core + Manual Checklist)
 
-Occasio is designed from the foundation up to meet WCAG 2.2 Level AA accessibility standards, with AAA contrast ratios achieved across core typographic elements.
+Occasio is tested against WCAG 2.2 Level AA accessibility standards, combining automated `@axe-core/playwright` audits across all views and dialogs, mathematical luminescence contrast testing of all token pairs and composited textures, and structured manual keyboard checklists.
 
 ---
 
 ## 1. Verified Contrast Ratios (WCAG AA: 4.5:1 normal, 3:1 large)
 
-Every theme color token pair was verified with mathematical luminescence testing across all three event modes (`wedding`, `birthday`, `community`) via `npm run test:contrast`. **48/48 checks passed (100% compliance)**.
+Every theme color token pair was verified with mathematical luminescence testing across all three event modes (`wedding`, `birthday`, `community`) via `npm run test:contrast`. **57/57 checks passed (100% compliance)**, including worst-case procedural noise and texture compositing.
 
 | Token Pair | Background Token | Measured Contrast | Target | Result |
 |---|---|---|---|---|
@@ -20,6 +20,8 @@ Every theme color token pair was verified with mathematical luminescence testing
 | Button Primary Text (`#FAF7F2`) | Community Primary (`#164E53`) | **9.1:1** | ≥ 4.5:1 (AA) | **PASS (Exceeds AAA)** |
 | `--color-error` (`#991B1B`) | `--color-paper` (`#FAF7F2`) | **6.9:1** | ≥ 4.5:1 (AA) | **PASS (Exceeds AAA)** |
 | `--color-success` (`#166534`) | `--color-paper` (`#FAF7F2`) | **6.3:1** | ≥ 4.5:1 (AA) | **PASS (Exceeds AAA)** |
+| Composited Noise Ink | Paper + 5% procedural grain | **15.0:1** | ≥ 4.5:1 (AA) | **PASS (Exceeds AAA)** |
+| Composited Hero Ivory | Hero + 6% dark weave texture | **10.8:1** | ≥ 4.5:1 (AA) | **PASS (Exceeds AAA)** |
 
 ---
 
@@ -62,17 +64,19 @@ Every theme color token pair was verified with mathematical luminescence testing
 ## 4. Automated Testing & Verification Evidence
 
 ### Axe-Core Test Suite (`@axe-core/playwright`)
-- **Overview Dashboard**: **0 serious or critical violations** (`tests/e2e/shell_geometry.spec.ts`).
-- **Onboarding Modal Dialog**: **0 serious or critical violations** (`tests/e2e/shell_geometry.spec.ts`).
+- **10 Core Views and Modals Audited**: **0 serious or critical violations** (`tests/e2e/master_flows_and_axe.spec.ts` & `tests/e2e/shell_geometry.spec.ts`).
+  - Scanned views: Overview (Wedding, Birthday, Community), Budget Allocation, Phased Timeline & Gantt, Vendor Pipeline & Quotes, Creative Ideas & Swatches, Planning Copilot, Scenario Comparison, Export Dialog, Shortcuts Dialog, and Reduce-Decoration Mode.
 - Surface opacity explicitly configured with solid `#FAF7F2` ensuring proper axe compositing over scrim overlays.
 
-### Lighthouse Mobile Audit
+### Lighthouse Mobile Audit (Production Build on Port 3001)
 Executed with Lighthouse CLI on simulated mobile viewport:
+- **Performance Score**: **99 / 100**
 - **Accessibility Score**: **100 / 100**
-- **Performance Score**: **92 / 100**
 - **Best Practices Score**: **100 / 100**
 - **SEO Score**: **100 / 100**
-- **Cumulative Layout Shift (CLS)**: **0.000**
 - **First Contentful Paint (FCP)**: **0.8 s**
+- **Largest Contentful Paint (LCP)**: **0.8 s**
+- **Total Blocking Time (TBT)**: **120 ms**
+- **Cumulative Layout Shift (CLS)**: **0.000**
 
 

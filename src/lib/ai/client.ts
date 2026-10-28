@@ -16,6 +16,7 @@ import {
   buildGenerationPrompt,
   buildCopilotSystemPrompt,
   buildCopilotPrompt,
+  PLAN_GENERATION_OUTPUT_SCHEMA,
 } from './prompts';
 import { getDemoIdeas } from './demo-engine';
 import { IdeasSchema } from '@/domain/schemas/ideas';
@@ -67,8 +68,8 @@ export async function generateEventPlanIdeas(
   const systemInstruction = buildSystemPrompt();
   const userPrompt = buildGenerationPrompt(input);
 
-  // Current working models in priority order
-  const models = ['gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-3.8-flash'];
+  // Verified models in priority order
+  const models = ['gemini-3.5-flash-lite', 'gemini-3.5-flash'];
   let lastError = '';
 
   for (const model of models) {
@@ -80,6 +81,7 @@ export async function generateEventPlanIdeas(
           systemInstruction,
           maxOutputTokens: AI_MAX_OUTPUT_TOKENS,
           responseMimeType: 'application/json',
+          responseSchema: PLAN_GENERATION_OUTPUT_SCHEMA,
           temperature: 0.7,
         },
       });
@@ -196,7 +198,7 @@ export async function executeCopilotChat(
 
   try {
     const response = await client.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3.5-flash-lite',
       contents: buildCopilotPrompt(userMessage, planSummary),
       config: {
         systemInstruction: buildCopilotSystemPrompt(),

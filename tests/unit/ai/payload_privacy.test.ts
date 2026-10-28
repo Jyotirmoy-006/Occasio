@@ -50,3 +50,4 @@ describe('AI Payload Privacy & Data Minimization (Requirement E)', () => {
     expect(fieldNames).toContain('dietaryRequirements');
   });
 });
+

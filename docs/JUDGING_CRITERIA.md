@@ -12,9 +12,9 @@ This document provides direct mapping from each hackathon judging parameter to t
 | **Code Quality** | Centralized error handling, typed schemas as single source of truth | `src/domain/schemas/*.ts` | `tests/unit/storage/storage.test.ts` | 100% schema validation on all inputs, storage, and AI outputs |
 | **Security** | Zero secrets in repo/git, server-only AI SDK calls, prompt injection defense, strict CSP headers | `src/lib/ai/sanitize.ts`, `src/app/api/generate/route.ts`, `next.config.ts`, `SECURITY.md` | `tests/unit/sanitize/sanitize.test.ts`, `git log -S "key"`, `npm run size-check` | **0 vulnerabilities** via `npm audit`, API key isolated in `.env.local` |
 | **Security** | Safe JSON import (size cap, schema check) | `src/lib/storage/index.ts` | `tests/unit/storage/storage.test.ts` | Rejects payloads > 512 KB, parses only valid schemas |
-| **Efficiency** | Initial JS < 150 KB, memoized derivations, sub-8 MB repo size limit | `scripts/size-check.mjs`, `next.config.ts`, `src/lib/storage/index.ts` | `npm run size-check`, `npm run build` | **0.74 MB tracked repo** (9.2% of 8 MB ceiling), **Turbopack static pre-rendering** |
-| **Testing** | 85%+ coverage on domain logic, 70%+ overall, unit + component + API + E2E tests | `tests/unit/**`, `tests/component/**`, `tests/e2e/**` | `npm run test:coverage` (vitest v8), `npm run test:e2e` (playwright) | **83 unit/component tests passed across 17 suites**, **14 E2E tests passed**, **98.23% budget lines, 100% checklist lines, 100% export lines, 100% timeline lines, 91.96% lines overall** |
-| **Accessibility** | WCAG 2.2 AA compliant, no color-only status, keyboard alternatives for drag, 44px touch targets, AAA contrast | `src/styles/tokens.css`, `src/components/timeline/TimelineView.tsx`, `docs/ACCESSIBILITY.md` | `npm run test:contrast`, `npm run test:e2e` (axe-core) | **48/48 contrast checks passed (≥ 4.5:1)**, **0 axe violations**, **Lighthouse Accessibility: 100** |
+| **Efficiency** | Initial JS < 150 KB, memoized derivations, sub-8 MB repo size limit | `scripts/size-check.mjs`, `next.config.ts`, `src/lib/storage/index.ts` | `npm run size-check`, `npm run build` | **0.79 MB tracked repo** (~9.9% of 8 MB ceiling), **Turbopack static pre-rendering** |
+| **Testing** | 85%+ coverage on domain logic, 70%+ overall, unit + component + API + E2E tests | `tests/unit/**`, `tests/component/**`, `tests/e2e/**` | `npm run test:coverage` (vitest v8), `npm run test:e2e` (playwright) | **100 unit/component tests passed across 21 suites**, **25 E2E tests passed**, **88.23% branch coverage in lib/ai/**, **98.23% budget lines, 100% checklist lines, 100% export lines, 100% timeline lines** |
+| **Accessibility** | Automated testing across views, no color-only status, keyboard alternatives for drag, 44px touch targets, AAA contrast | `src/styles/tokens.css`, `src/components/timeline/TimelineView.tsx`, `docs/ACCESSIBILITY.md` | `npm run test:contrast`, `npm run test:e2e` (axe-core) | **57/57 contrast checks passed (≥ 4.5:1)**, **0 axe violations across 10 views/modals**, **Production Lighthouse Accessibility: 100, Performance: 99** |
 | **Problem Alignment** | 1. Budgets: interactive donut, linked sliders, integer math invariant, actual spend tracking | `src/domain/budget/allocation.ts`, `src/components/budget/BudgetView.tsx` | `tests/unit/budget/allocation.test.ts` | `sum(categories) === total` strictly preserved, zero floating point drift |
 | **Problem Alignment** | 2. Timelines: backward-planned from event date, Gantt + list views, countdown, .ICS export | `src/domain/timeline/generate.ts`, `src/domain/timeline/ics.ts`, `src/components/timeline/TimelineView.tsx` | `tests/unit/timeline/generate.test.ts`, `tests/unit/timeline/ics.test.ts` | RFC 5545 compliant calendar export, backward chronological milestones |
 | **Problem Alignment** | 3. Vendor Checklists: category vendor types, questions to ask, 4-stage pipeline, quotes feed budget actuals | `src/domain/checklist/generate.ts`, `src/components/checklist/ChecklistView.tsx` | `tests/unit/checklist/generate.test.ts`, `tests/component/onboarding_budget.test.tsx` | Never hallucinates fake vendor businesses or prices; quotes update budget actuals |
@@ -30,7 +30,7 @@ This document provides direct mapping from each hackathon judging parameter to t
 
 ### 1. Size Check (`npm run size-check`)
 ```
-Tracked repo size: 0.74 MB (774305 bytes)
+Tracked repo size: 0.79 MB (825758 bytes)
 PASS: Under 8 MB limit.
 ```
 
@@ -41,28 +41,41 @@ PASS: Under 8 MB limit.
 (Exit code 0, 0 errors)
 ```
 
-### 3. Unit & Component Tests (`npm run test`)
+### 3. Unit & Domain Tests (`npm run test`)
 ```
-Test Files  17 passed (17)
-     Tests  83 passed (83)
-  Duration  14.91s
+Test Files  21 passed (21)
+     Tests  100 passed (100)
+  Duration  8.58s
+Branch coverage in lib/ai: 88.23% (exceeds 85% requirement)
 ```
 
 ### 4. Playwright End-to-End Suite (`npm run test:e2e`)
 ```
-Running 14 tests using 1 worker
-  14 passed (19.3s)
+Running 25 tests using 1 worker
+  25 passed (1.1m)
   - Non-collision bounding box assertions at 1440, 1024, 768, 360px
   - Zero horizontal overflow at 320, 360, 768, 1024, 1440px
+  - Accessible Radix tooltips and popovers across all viewports
   - Modal fit at 1366x768 and 360x640px
   - Milestone keyboard completion and undo toast
-  - Axe-core zero serious/critical violations on Overview & Onboarding Wizard
+  - Happy paths for Wedding, Birthday, and Community
+  - Mobile 360x640 flow and AI route 500 demo fallback
+  - Axe-core zero serious/critical violations across 10 views and modals
 ```
 
 ### 5. Contrast Verification (`npm run test:contrast`)
 ```
-Results: 48 checks passed, 0 failures.
-All theme color token pairs exceed WCAG AA 4.5:1 contrast requirements.
+Results: 57 checks passed, 0 failures.
+All theme color token pairs and worst-case composited textures exceed WCAG AA 4.5:1 contrast requirements.
+```
+
+### 6. Production Lighthouse Mobile Audit
+```
+Performance: 99 / 100
+Accessibility: 100 / 100
+Best Practices: 100 / 100
+SEO: 100 / 100
+FCP: 0.8s, LCP: 0.8s, TBT: 120ms, CLS: 0.000
 ```
 
 ### 6. Lighthouse Mobile Audit (`http://localhost:3000`)

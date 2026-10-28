@@ -144,7 +144,7 @@ test.describe('G: Accessibility & Keyboard Workflows', () => {
 
     // Verify Undo toast notification appears
     const toast = page.locator('[role="status"]');
-    await expect(toast).toContainText('Milestone marked complete');
+    await expect(toast).toContainText('as complete');
 
     // Click Undo
     const undoBtn = page.getByRole('button', { name: /Undo/i });

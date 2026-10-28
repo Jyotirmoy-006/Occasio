@@ -1,65 +1,86 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { usePlan } from '@/lib/context/PlanContext';
 import { Button } from '@/components/ui/Button';
+import { Tooltip } from '@/components/ui/Tooltip';
+import { StatusPillPopover } from '@/components/layout/StatusPillPopover';
 import { OnboardingModal } from '@/components/onboarding/OnboardingModal';
 import { ExportModal } from '@/components/export/ExportModal';
 import { ShortcutsModal } from '@/components/ui/ShortcutsModal';
 import { Plus, Download, Keyboard } from 'lucide-react';
-
-interface AiHealthData {
-  status: string;
-  demoMode: boolean;
-  aiStatus: 'ai_live' | 'demo_no_key' | 'ai_unavailable_fallback';
-  label: string;
-  tooltip: string;
-  model: string | null;
-}
+import type { HealthResponse } from '@/app/api/health/route';
 
 export function Header() {
   const { undo, redo, canUndo, canRedo, activeTab, plan } = usePlan();
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
-  const [health, setHealth] = useState<AiHealthData>({
+  const [isCheckingHealth, setIsCheckingHealth] = useState(false);
+  const [health, setHealth] = useState<HealthResponse>({
     status: 'ok',
     demoMode: true,
     aiStatus: 'demo_no_key',
     label: 'Checking AI...',
     tooltip: 'Checking server AI connectivity...',
     model: null,
+    timestamp: '',
   });
 
   // Fetch real AI health state from server
+  const fetchHealth = useCallback(async (force = false) => {
+    setIsCheckingHealth(true);
+    try {
+      const url = force ? '/api/health?force=1' : '/api/health';
+      const res = await fetch(url);
+      if (res.ok) {
+        const data = await res.json();
+        setHealth(data);
+      }
+    } catch {
+      setHealth({
+        status: 'ok',
+        demoMode: true,
+        aiStatus: 'unavailable_network_error',
+        label: 'AI unavailable: network error',
+        tooltip: 'Could not contact health check endpoint. Running on demo engine.',
+        model: null,
+        timestamp: new Date().toISOString(),
+      });
+    } finally {
+      setIsCheckingHealth(false);
+    }
+  }, []);
+
   useEffect(() => {
-    let isMounted = true;
-    async function checkHealth() {
+    let ignore = false;
+
+    const check = async () => {
       try {
         const res = await fetch('/api/health');
-        if (res.ok) {
+        if (res.ok && !ignore) {
           const data = await res.json();
-          if (isMounted) {
-            setHealth(data);
-          }
+          setHealth(data);
         }
       } catch {
-        if (isMounted) {
+        if (!ignore) {
           setHealth({
             status: 'ok',
             demoMode: true,
-            aiStatus: 'demo_no_key',
-            label: 'Demo mode (no key)',
-            tooltip: 'Running deterministic templates. Set GEMINI_API_KEY for live AI.',
+            aiStatus: 'unavailable_network_error',
+            label: 'AI unavailable: network error',
+            tooltip: 'Could not contact health check endpoint. Running on demo engine.',
             model: null,
+            timestamp: new Date().toISOString(),
           });
         }
       }
-    }
-    checkHealth();
-    const interval = setInterval(checkHealth, 60000);
+    };
+
+    check();
+    const interval = setInterval(check, 60000);
     return () => {
-      isMounted = false;
+      ignore = true;
       clearInterval(interval);
     };
   }, []);
@@ -110,14 +131,14 @@ export function Header() {
       </a>
 
       <header
-        className="hairline-b bg-paper sticky top-0 z-30 h-[72px] flex items-center justify-between px-3 sm:px-6 lg:px-8 w-full max-w-full overflow-hidden"
+        className="hairline-b bg-paper sticky top-0 z-30 h-[72px] flex items-center justify-between px-4 sm:px-6 lg:px-8 w-full max-w-full"
         role="banner"
       >
         {/* Left: Mobile Brand & Active View Title */}
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 shrink">
           {/* Mobile-only logo mark */}
           <div className="md:hidden flex items-center gap-2 shrink-0">
-            <div className="w-8 h-8 rounded-md bg-[var(--color-accent)] text-paper flex items-center justify-center font-serif text-lg font-bold select-none shrink-0">
+            <div className="w-8 h-8 rounded-md bg-[var(--color-accent)] text-paper flex items-center justify-center font-serif text-lg font-bold select-none shrink-0 shadow-sm">
               O
             </div>
             <span className="font-serif text-lg sm:text-xl font-bold tracking-tight text-ink hidden sm:inline truncate">
@@ -139,70 +160,48 @@ export function Header() {
         </div>
 
         {/* Right Tools: Status Pill, Shortcuts, Export, New Plan */}
-        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-          {/* Real State Status Pill (A5) */}
-          <div
-            className="group relative flex items-center gap-1.5 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-full bg-surface border border-border text-[11px] sm:text-[12px] font-medium text-ink cursor-help select-none shrink-0"
-            title={health.tooltip}
-            aria-label={`AI Status: ${health.label}`}
-          >
-            <span
-              className={`w-2 h-2 rounded-full shrink-0 ${
-                health.aiStatus === 'ai_live'
-                  ? 'bg-[#186333] shadow-[0_0_6px_rgba(24,99,51,0.6)]'
-                  : health.aiStatus === 'ai_unavailable_fallback'
-                  ? 'bg-[#8A4500]'
-                  : 'bg-[#6E665E]'
-              }`}
-            />
-            <span className="hidden sm:inline">{health.label}</span>
-            <span className="sm:hidden text-[11px]">
-              {health.aiStatus === 'ai_live' ? 'Live' : 'Demo'}
-            </span>
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0 flex-nowrap">
+          {/* Real State Status Pill with Popover (1C) */}
+          <StatusPillPopover
+            health={health}
+            onRefresh={() => fetchHealth(true)}
+            isChecking={isCheckingHealth}
+          />
 
-            {/* Accessible Hover/Focus Tooltip */}
-            <div
-              role="tooltip"
-              className="absolute right-0 top-full mt-2 hidden group-hover:block group-focus:block w-64 p-2 bg-ink text-paper text-[12px] rounded shadow-md z-50 pointer-events-none"
-            >
-              {health.tooltip}
-            </div>
+          {/* Shortcuts Button - desktop/tablet (1A) */}
+          <div className="hidden sm:block">
+            <Tooltip content="Keyboard shortcuts (?)">
+              <button
+                type="button"
+                onClick={() => setIsShortcutsOpen(true)}
+                aria-label="Keyboard shortcuts, press ?"
+                className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-md hover:bg-surface text-ink-muted hover:text-ink transition-colors cursor-pointer border border-transparent hover:border-border focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
+              >
+                <Keyboard className="w-4 h-4 stroke-[1.5]" />
+              </button>
+            </Tooltip>
           </div>
 
-          {/* Shortcuts Button - desktop/tablet (A7) */}
-          <div className="relative group hidden sm:block">
-            <button
-              onClick={() => setIsShortcutsOpen(true)}
-              aria-label="Keyboard shortcuts, press ?"
-              className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-md hover:bg-surface text-ink-muted hover:text-ink transition-colors cursor-pointer border border-transparent hover:border-border"
+          {/* Export Action: Icon-only below 1024px, labeled text at 1024px+ (1B) */}
+          <Tooltip content="Export plan (CSV, ICS, JSON, PDF)">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsExportOpen(true)}
+              aria-label="Export plan"
+              className="gap-2 min-h-[44px] text-sm shrink-0 px-3"
             >
-              <Keyboard className="w-4 h-4 stroke-[1.5]" />
-            </button>
-            <div
-              role="tooltip"
-              className="absolute right-0 top-full mt-1 hidden group-hover:block whitespace-nowrap p-1.5 bg-ink text-[#FAF7F2] text-[11px] rounded shadow z-50 pointer-events-none"
-            >
-              Keyboard shortcuts, press ?
-            </div>
-          </div>
-
-          {/* Export Action - desktop/tablet */}
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => setIsExportOpen(true)}
-            className="hidden sm:inline-flex gap-2 min-h-[44px] text-sm"
-          >
-            <Download className="w-4 h-4 stroke-[1.5]" />
-            <span>Export</span>
-          </Button>
+              <Download className="w-4 h-4 stroke-[1.5]" />
+              <span className="hidden lg:inline font-sans">Export</span>
+            </Button>
+          </Tooltip>
 
           {/* New Plan Action */}
           <Button
             variant="primary"
             size="sm"
             onClick={() => setIsOnboardingOpen(true)}
-            aria-label="New Plan"
+            aria-label="New Plan Wizard"
             className="gap-1 min-h-[36px] sm:min-h-[44px] px-2.5 sm:px-3 text-xs sm:text-sm shrink-0"
           >
             <Plus className="w-4 h-4 stroke-[1.5]" />

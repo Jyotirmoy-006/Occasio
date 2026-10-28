@@ -1,12 +1,15 @@
 :root {
   /* Editorial Palette: Warm paper, deep ink, tactile tones */
   --color-paper: #FAF7F2;
+  --color-paper-card: #FAF7F2;
   --color-ink: #1C1917;
-  --color-ink-muted: #5E5750; /* 5.5:1 WCAG AA contrast against #FAF7F2 */
-  --color-ink-subtle: #6E665E; /* 4.6:1 WCAG AA contrast */
+  --color-ink-muted: #5E5750; /* >= 5.5:1 WCAG AA contrast against #FAF7F2 */
+  --color-ink-subtle: #6E665E; /* >= 4.6:1 WCAG AA contrast */
   --color-border: #E5DDD5;
   --color-border-dark: #D4C7BA;
+  --color-border-sheet: rgba(28, 25, 23, 0.1);
   --color-surface: #F5EFE6;
+  --color-surface-sunken: #EDE5D8;
   --color-surface-raised: #EDE4D8;
 
   /* Default Wedding Accent: Deep forest green with warm ivory & gold */
@@ -14,6 +17,11 @@
   --color-accent-hover: #13382D;
   --color-accent-subtle: rgba(27, 77, 62, 0.08);
   --color-accent-highlight: #7A6230;
+  --color-hero-bg: #1B4434;
+  --color-hero-text: #FAF7F2;
+  --color-hero-muted: #D8D2C5;
+  --color-foil: #C59B27;
+  --color-foil-flat: #9A761B;
 
   /* Status Colors (WCAG AA compliant against #FAF7F2) */
   --color-success: #186333;
@@ -54,6 +62,11 @@
   --color-accent-hover: #13382D;
   --color-accent-subtle: rgba(27, 77, 62, 0.08);
   --color-accent-highlight: #7A6230;
+  --color-hero-bg: #1B4434;
+  --color-hero-text: #FAF7F2;
+  --color-hero-muted: #D8D2C5;
+  --color-foil: #C59B27;
+  --color-foil-flat: #9A761B;
 }
 
 [data-event-theme='birthday'],
@@ -62,6 +75,11 @@
   --color-accent-hover: #7F3215;
   --color-accent-subtle: rgba(156, 65, 30, 0.08);
   --color-accent-highlight: #8A6014;
+  --color-hero-bg: #823415;
+  --color-hero-text: #FAF7F2;
+  --color-hero-muted: #EADCD1;
+  --color-foil: #D4AF37;
+  --color-foil-flat: #A3821C;
 }
 
 [data-event-theme='community'],
@@ -70,6 +88,11 @@
   --color-accent-hover: #0F3D42;
   --color-accent-subtle: rgba(22, 83, 89, 0.08);
   --color-accent-highlight: #755928;
+  --color-hero-bg: #13464C;
+  --color-hero-text: #FAF7F2;
+  --color-hero-muted: #D0DFE0;
+  --color-foil: #B8860B;
+  --color-foil-flat: #8B6508;
 }
 
 /* Accessibility: Respect Reduced Motion */

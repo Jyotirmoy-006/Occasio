@@ -133,9 +133,11 @@ export function buildGenerationPrompt(input: OnboardingInput): string {
   let leadTimeNote = 'Flexible lead time';
   try {
     const eventTime = new Date(input.eventDate).getTime();
-    const nowTime = Date.now();
-    const days = Math.max(1, Math.round((eventTime - nowTime) / (1000 * 60 * 60 * 24)));
-    leadTimeNote = `Approximately ${days} days lead time`;
+    if (!isNaN(eventTime)) {
+      const nowTime = Date.now();
+      const days = Math.max(1, Math.round((eventTime - nowTime) / (1000 * 60 * 60 * 24)));
+      leadTimeNote = `Approximately ${days} days lead time`;
+    }
   } catch {
     // fallback
   }
