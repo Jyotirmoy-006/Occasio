@@ -4,6 +4,7 @@
  * Used for: API input/output validation, localStorage reads, JSON import.
  */
 import { z } from 'zod';
+z.config({ jitless: true });
 import { BudgetSchema } from './budget';
 import { TimelineSchema } from './timeline';
 import { ChecklistSchema } from './checklist';

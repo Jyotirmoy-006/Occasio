@@ -153,7 +153,7 @@ export function Header() {
                 {tabTitles[activeTab] || 'Planner'}
               </h1>
               {plan?.eventType && (
-                <span className="text-[12px] font-sans font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-surface border border-border text-ink-muted shrink-0">
+                <span className="text-[12px] font-sans font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-surface border border-border text-ink-muted shrink-0 hidden lg:inline">
                   {plan.eventType}
                 </span>
               )}

@@ -509,7 +509,7 @@ export function OnboardingModal({ isOpen, onClose }: OnboardingModalProps) {
                         disabled={s > step}
                         className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-2.5 transition-colors ${
                           step === s
-                            ? 'bg-[var(--color-accent-subtle)] text-[var(--color-accent)] font-semibold'
+                            ? 'bg-[var(--color-accent-subtle)] text-ink font-bold'
                             : s < step
                             ? 'text-ink hover:bg-surface cursor-pointer'
                             : 'text-ink-muted/50 cursor-not-allowed'
@@ -526,7 +526,7 @@ export function OnboardingModal({ isOpen, onClose }: OnboardingModalProps) {
                         >
                           {s < step ? <Check className="w-3 h-3 stroke-[2]" /> : s}
                         </span>
-                        <span className="text-[13px]">{title}</span>
+                        <span className={`text-[13px] ${step === s ? 'text-ink font-bold' : ''}`}>{title}</span>
                       </button>
                     </li>
                   ))}

@@ -319,7 +319,7 @@ export function OverviewView() {
               <span className="text-[12px] font-sans font-semibold uppercase tracking-wider text-[#FAF7F2]/80">
                 Total Planned Budget
               </span>
-              <span className="font-serif text-2xl sm:text-4xl font-bold text-[#FAF7F2] tabular-nums foil-accent-dark">
+              <span className="font-serif text-2xl sm:text-4xl font-bold text-[#FAF7F2] tabular-nums foil-accent foil-accent-dark">
                 {formatMoney(totalBudgetMinor, plan.currency, { hideZeroCents: true })}
               </span>
             </div>

@@ -133,10 +133,15 @@ export async function checkAiHealth(force = false): Promise<HealthResponse> {
     const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
     const verifiedModel = 'gemini-3.5-flash-lite';
 
-    await client.models.generateContent({
+    const pingPromise = client.models.generateContent({
       model: verifiedModel,
       contents: 'ping',
     });
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('AI health check timed out after 8s')), 8000)
+    );
+
+    await Promise.race([pingPromise, timeoutPromise]);
 
     const res: HealthResponse = {
       status: 'ok',

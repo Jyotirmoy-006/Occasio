@@ -1,10 +1,16 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
+import { z } from 'zod';
 import './globals.css';
+
+z.config({ jitless: true });
 import { PlanProvider } from '@/lib/context/PlanContext';
 import { TooltipProvider } from '@/components/ui/Tooltip';
 import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { MobileNav } from '@/components/layout/MobileNav';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Occasio — GenAI Event Planning Assistant',
@@ -12,14 +18,16 @@ export const metadata: Metadata = {
     'A GenAI-powered planning assistant organizing weddings, birthdays, and community events with budgets, timelines, vendor checklists, and personalized ideas.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = await headers();
+  const nonce = headersList.get('x-nonce') ?? undefined;
 
   return (
-    <html lang="en" data-event-theme="wedding" data-event="wedding" className="paper-grain">
+    <html lang="en" data-event-theme="wedding" data-event="wedding" className="paper-grain" nonce={nonce}>
       <body className="min-h-screen bg-paper text-ink antialiased">
         <TooltipProvider delayDuration={300}>
           <PlanProvider>

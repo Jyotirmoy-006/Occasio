@@ -12,6 +12,7 @@
     "test:coverage": "vitest run --coverage",
     "test:contrast": "node scripts/check-contrast.mjs",
     "test:e2e": "playwright test",
+    "test:smoke": "playwright test tests/e2e/smoke.spec.ts",
     "size-check": "node scripts/size-check.mjs",
     "demo:voices": "python demo/generate_voices.py",
     "demo:record": "node demo/record_full_v2.mjs",

@@ -212,11 +212,11 @@ html[data-reduce-decoration="true"],
     text-shadow: none !important;
   }
 
+  .foil-accent,
   .foil-accent-dark {
     color: var(--color-foil-dark, #D9B65B) !important;
   }
 
-  .foil-accent,
   .foil-accent-light {
     color: var(--color-foil-light, #8A6A12) !important;
   }

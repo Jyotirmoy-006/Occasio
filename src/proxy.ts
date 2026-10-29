@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   const isDev = process.env.NODE_ENV === 'development';
 
@@ -31,6 +31,9 @@ export function middleware(request: NextRequest) {
 
   response.headers.set('Content-Security-Policy', cspHeader);
   response.headers.set('x-nonce', nonce);
+  response.headers.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  response.headers.set('CDN-Cache-Control', 'no-store');
+  response.headers.set('Vercel-CDN-Cache-Control', 'no-store');
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('X-XSS-Protection', '1; mode=block');
@@ -41,7 +44,8 @@ export function middleware(request: NextRequest) {
   return response;
 }
 
-export const proxy = middleware;
+export const middleware = proxy;
+export default proxy;
 
 export const config = {
   matcher: [

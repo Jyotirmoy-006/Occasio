@@ -52,9 +52,9 @@ export function StatusPillPopover({ health, onRefresh, isChecking = false }: Sta
             aria-label={`AI Status: ${health.label}. Click to view details and verify connection.`}
           >
             <span className={`w-2 h-2 rounded-full shrink-0 ${dotColor}`} />
-            <span className="hidden sm:inline font-sans">{health.label}</span>
-            <span className="sm:hidden font-sans text-[11px]">
-              {isLive ? 'Live' : 'Demo'}
+            <span className="hidden lg:inline font-sans truncate">{health.label}</span>
+            <span className="lg:hidden font-sans text-[11px] truncate">
+              {isLive ? 'Live' : isNoKey ? 'Demo' : 'AI Offline'}
             </span>
           </button>
         </Popover.Trigger>
