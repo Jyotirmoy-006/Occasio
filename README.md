@@ -149,6 +149,34 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
+## Demo Video Pipeline
+
+Occasio includes a fully reproducible, deterministic headless video production pipeline that records a pristine 1080p, 30 fps walkthrough with synchronized AI narration (`en-US-AndrewNeural`), burned-in accessible subtitles, and live Gemini interactions:
+
+```bash
+# 1. Ensure production server is running
+npm run build && npm start
+
+# 2. Synthesize scene narrations (requires edge-tts)
+npm run demo:voices
+
+# 3. Record headless Playwright walkthrough (1920x1080)
+npm run demo:record
+
+# 4. Generate subtitles, align audio, encode MP4 (H.264 CRF 17 slow preset)
+npm run demo:subs
+npm run demo:audio
+npm run demo:build
+
+# 5. Generate YouTube chapters description and run quality assertions
+npm run demo:youtube
+npm run demo:verify
+```
+
+Artifacts are saved to `demo-out/` (`occasio-demo.mp4`, `occasio-demo-nosubs.mp4`, `thumbnail.png`, and `youtube-description.txt`).
+
+---
+
 ## Limitations & Roadmap
 
 ### Current Limitations

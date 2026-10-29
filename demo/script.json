@@ -1,0 +1,88 @@
+{
+  "voice": "en-US-AndrewNeural",
+  "rate": "-5%",
+  "repoUrl": "https://github.com/your-username/occasio",
+  "scenes": [
+    {
+      "id": "S1",
+      "title": "Title Card",
+      "spokenText": "Planning a wedding, a birthday, or a community festival means juggling budgets, deadlines, and vendors. Occasio brings it all into one clear plan.",
+      "subtitleText": "Planning a wedding, a birthday, or a community festival means juggling budgets, deadlines, and vendors. Occasio brings it all into one clear plan.",
+      "action": "Show editorial stationery title card with embossed seal and typography",
+      "minDuration": 9.5
+    },
+    {
+      "id": "S2",
+      "title": "Welcome and Wizard",
+      "spokenText": "Choose your event, set the date, guest count, and budget. A live preview shows how your money will be split, before any AI is involved.",
+      "subtitleText": "Choose your event, set the date, guest count, and budget. A live preview shows how your money will be split, before any AI is involved.",
+      "action": "Select Wedding, type neutral event name, choose date ~1 year out, 120 guests, adjust budget, watch live donut update",
+      "minDuration": 9.5
+    },
+    {
+      "id": "S3",
+      "title": "Gemini Live Generation",
+      "spokenText": "Gemini then creates personalized ideas, while budgets and dates are calculated by tested code, so the numbers are always right. Your event name never leaves your device.",
+      "subtitleText": "Gemini then creates personalized ideas, while budgets and dates are calculated by tested code, so the numbers are always right. Your event name never leaves your device.",
+      "action": "Submit wizard, show loading state, arrive on Overview with AI live pill and Gemini provenance badge",
+      "minDuration": 10.5
+    },
+    {
+      "id": "S4",
+      "title": "Overview & Milestones",
+      "spokenText": "Your overview shows the countdown, the next deadlines, and your plan's health at a glance.",
+      "subtitleText": "Your overview shows the countdown, the next deadlines, and your plan's health at a glance.",
+      "action": "Highlight arch photo, countdown seal, tick off two milestones, show undo toast notification",
+      "minDuration": 6.5
+    },
+    {
+      "id": "S5",
+      "title": "Budget Rebalancing",
+      "spokenText": "Drag a slider, and every other category rebalances instantly, always adding up to your total.",
+      "subtitleText": "Drag a slider, and every other category rebalances instantly, always adding up to your total.",
+      "action": "Navigate to Budget & Sliders, drag two sliders, show dynamic rebalancing without budget drift",
+      "minDuration": 6.5
+    },
+    {
+      "id": "S6",
+      "title": "Timeline & Vendors",
+      "spokenText": "Milestones are planned backward from your date. Track each vendor from first contact to booked, and quotes feed your real spend.",
+      "subtitleText": "Milestones are planned backward from your date. Track each vendor from first contact to booked, and quotes feed your real spend.",
+      "action": "Navigate to Timeline Gantt view, shift milestone; open Vendor Pipeline, move vendor to Quoted and input quote",
+      "minDuration": 8.5
+    },
+    {
+      "id": "S7",
+      "title": "Creative Ideas",
+      "spokenText": "Get themes, palettes, and menus matched to your style and dietary needs.",
+      "subtitleText": "Get themes, palettes, and menus matched to your style and dietary needs.",
+      "action": "Navigate to Creative Ideas, highlight mood images, contrast-tested swatches, menu items, pin one idea",
+      "minDuration": 5.5
+    },
+    {
+      "id": "S8",
+      "title": "Planning Copilot",
+      "spokenText": "Ask the copilot to cut costs. It shows exactly what will change, and nothing happens until you confirm.",
+      "subtitleText": "Ask the copilot to cut costs. It shows exactly what will change, and nothing happens until you confirm.",
+      "action": "Navigate to Copilot, submit 'Cut the budget by ten percent but keep photography', preview visual diff, Confirm, then Undo",
+      "minDuration": 7.5
+    },
+    {
+      "id": "S9",
+      "title": "Themes & Accessibility",
+      "spokenText": "Fully keyboard accessible, and every event type has its own look.",
+      "subtitleText": "Fully keyboard accessible, and every event type has its own look.",
+      "action": "Press Ctrl+K command palette, keyboard navigate, switch theme to Birthday and Community",
+      "minDuration": 5.0
+    },
+    {
+      "id": "S10",
+      "title": "Closing Card",
+      "spokenText": "Private by design, accessible, tested, and open source. This is Occasio.",
+      "subtitleText": "Private by design, accessible, tested, and open source. This is Occasio.",
+      "action": "Show closing stationery card with GitHub repository link and tech stack badges",
+      "minDuration": 5.0
+    }
+  ]
+}
+

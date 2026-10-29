@@ -12,7 +12,15 @@
     "test:coverage": "vitest run --coverage",
     "test:contrast": "node scripts/check-contrast.mjs",
     "test:e2e": "playwright test",
-    "size-check": "node scripts/size-check.mjs"
+    "size-check": "node scripts/size-check.mjs",
+    "demo:voices": "python demo/generate_voices.py",
+    "demo:record": "node demo/record_full.mjs",
+    "demo:subs": "python demo/generate_subs.py",
+    "demo:audio": "python demo/build_audio.py",
+    "demo:build": "python demo/build_video.py",
+    "demo:youtube": "python demo/generate_youtube_desc.py",
+    "demo:verify": "python demo/verify_video.py",
+    "demo:all": "npm run demo:voices && npm run demo:record && npm run demo:subs && npm run demo:audio && npm run demo:build && npm run demo:youtube && npm run demo:verify"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
