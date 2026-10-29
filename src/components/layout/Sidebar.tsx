@@ -89,7 +89,7 @@ export function Sidebar() {
           <span className="font-serif text-2xl font-bold tracking-tight text-ink leading-tight">
             Occasio
           </span>
-          <span className="text-[10px] font-sans font-semibold tracking-widest uppercase text-ink-muted">
+          <span className="text-[12px] font-sans font-semibold tracking-wider uppercase text-ink-muted">
             Stationery & Event Arts
           </span>
         </div>
@@ -97,7 +97,7 @@ export function Sidebar() {
 
       {/* Navigation Modules */}
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto" aria-label="Planning Modules">
-        <span className="text-[11px] font-sans font-semibold uppercase tracking-wider text-ink-muted px-3.5 mb-2 block">
+        <span className="text-[12px] font-sans font-semibold uppercase tracking-wider text-ink-muted px-3.5 mb-2 block">
           Planning Modules
         </span>
 
@@ -109,10 +109,10 @@ export function Sidebar() {
               key={item.id}
               onClick={() => setActiveTab(item.id)}
               aria-current={isActive ? 'page' : undefined}
-              className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-md text-sm font-medium flex items-center justify-between transition-colors cursor-pointer group bg-paper border ${
+              className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-r-md text-sm font-medium flex items-center justify-between transition-colors cursor-pointer group border-l-[3px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
                 isActive
-                  ? 'border-[var(--color-accent)] text-[var(--color-accent)] font-semibold shadow-xs'
-                  : 'border-transparent text-ink-muted hover:border-border hover:bg-surface hover:text-ink'
+                  ? 'border-l-[var(--color-accent)] bg-[var(--color-accent-subtle)] text-[var(--color-accent)] font-semibold border-y-transparent border-r-transparent'
+                  : 'border-l-transparent text-ink-muted hover:bg-surface hover:text-ink'
               }`}
             >
               <div className="flex items-center gap-3">
@@ -124,9 +124,9 @@ export function Sidebar() {
 
               {item.badge ? (
                 <span
-                  className={`text-[11px] tabular-nums font-medium px-2 py-0.5 rounded ${
+                  className={`text-[12px] tabular-nums font-medium px-2 py-0.5 rounded ${
                     isActive
-                      ? 'bg-[var(--color-accent)] text-paper'
+                      ? 'bg-[var(--color-accent)] text-[#FAF7F2]'
                       : 'bg-surface border border-border text-ink-muted'
                   }`}
                 >

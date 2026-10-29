@@ -86,4 +86,20 @@ describe('Timeline Generation Domain Logic', () => {
   it('calculates negative days for past events', () => {
     expect(daysUntilEvent('2020-01-01')).toBeLessThan(0);
   });
+
+  it('snaps preparation milestones to business weekdays (Mon-Fri)', () => {
+    // Pick an event date on Sunday
+    const sundayEvent = '2027-06-20';
+    const timeline = generateTimeline('wedding', sundayEvent);
+
+    for (const m of timeline.milestones) {
+      if (m.weeksBeforeEvent > 0) {
+        const parsed = parseLocalDate(m.dueDate);
+        const dayOfWeek = parsed.getDay();
+        // Day of week: 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+        expect(dayOfWeek).toBeGreaterThanOrEqual(1);
+        expect(dayOfWeek).toBeLessThanOrEqual(5);
+      }
+    }
+  });
 });

@@ -123,9 +123,27 @@ export function formatISODate(date: Date): string {
 }
 
 /**
+ * Snaps a date to the nearest preceding weekday (Mon-Fri) so vendor and
+ * planning deadlines never land on weekend days when businesses are closed.
+ * If Saturday, snaps to Friday (-1 day); if Sunday, snaps to Friday (-2 days).
+ */
+export function snapToWeekday(date: Date): Date {
+  const result = new Date(date.getTime());
+  const day = result.getDay();
+  if (day === 0) {
+    // Sunday -> snap back to Friday
+    result.setDate(result.getDate() - 2);
+  } else if (day === 6) {
+    // Saturday -> snap back to Friday
+    result.setDate(result.getDate() - 1);
+  }
+  return result;
+}
+
+/**
  * Generates backward-planned phased milestones from the event date.
  * Automatically compresses lead times if the available window is short,
- * ensuring milestones are evenly distributed and not scheduled in the past.
+ * snaps milestones to weekdays (Mon-Fri), and guarantees chronological ordering.
  */
 export function generateTimeline(eventType: EventType, eventDate: string): Timeline {
   const targetDate = parseLocalDate(eventDate);
@@ -142,8 +160,11 @@ export function generateTimeline(eventType: EventType, eventDate: string): Timel
     const scaledWeeks = Math.round(tmpl.weeksBeforeEvent * compressionRatio);
     const daysBefore = scaledWeeks * 7;
 
-    const dueDate = new Date(targetDate.getTime());
-    dueDate.setDate(dueDate.getDate() - daysBefore);
+    const rawDueDate = new Date(targetDate.getTime());
+    rawDueDate.setDate(rawDueDate.getDate() - daysBefore);
+
+    // Snap preparation milestones to business weekdays (celebration day itself retains targetDate)
+    const dueDate = daysBefore > 0 ? snapToWeekday(rawDueDate) : rawDueDate;
 
     return {
       id: `milestone-${idx + 1}-${tmpl.category}`,
@@ -157,6 +178,9 @@ export function generateTimeline(eventType: EventType, eventDate: string): Timel
       isCritical: tmpl.isCritical,
     };
   });
+
+  // Guarantee chronological ascending order
+  milestones.sort((a, b) => a.dueDate.localeCompare(b.dueDate));
 
   return { milestones };
 }

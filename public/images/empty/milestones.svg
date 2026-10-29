@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" width="100%" height="100%" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <!-- Desk calendar card -->
+  <rect x="45" y="30" width="150" height="120" rx="8" fill="#FFFDF8" stroke="#E6DFD5" stroke-width="1.5" />
+  
+  <!-- Spiral / Brass clip rings -->
+  <path d="M70 24 C70 20 78 20 78 24 L78 36 C78 40 70 40 70 36 Z" fill="#F1EADC" stroke="#8A6A12" stroke-width="1.5" />
+  <path d="M116 24 C116 20 124 20 124 24 L124 36 C124 40 116 40 116 36 Z" fill="#F1EADC" stroke="#8A6A12" stroke-width="1.5" />
+  <path d="M162 24 C162 20 170 20 170 24 L170 36 C170 40 162 40 162 36 Z" fill="#F1EADC" stroke="#8A6A12" stroke-width="1.5" />
+  
+  <!-- Calendar Grid lines -->
+  <line x1="60" y1="58" x2="180" y2="58" stroke="#E6DFD5" stroke-width="1.5" />
+  <line x1="60" y1="80" x2="180" y2="80" stroke="#F1EADC" stroke-width="1" stroke-dasharray="2 3" />
+  <line x1="60" y1="102" x2="180" y2="102" stroke="#F1EADC" stroke-width="1" stroke-dasharray="2 3" />
+  <line x1="60" y1="124" x2="180" y2="124" stroke="#F1EADC" stroke-width="1" stroke-dasharray="2 3" />
+  
+  <!-- Elegant Clock / Stopwatch Dial in Corner -->
+  <circle cx="150" cy="115" r="22" fill="#FFFDF8" stroke="#17392C" stroke-width="1.5" />
+  <circle cx="150" cy="115" r="18" fill="none" stroke="#D9B65B" stroke-width="1" stroke-dasharray="1 3" />
+  <line x1="150" y1="115" x2="150" y2="103" stroke="#17392C" stroke-width="1.5" />
+  <line x1="150" y1="115" x2="159" y2="119" stroke="#8A6A12" stroke-width="1.5" />
+  <circle cx="150" cy="115" r="2" fill="#8A6A12" />
+  
+  <!-- Botanical sprig accent -->
+  <path d="M65 135 Q75 110 95 105" stroke="#2F6B4F" stroke-width="1.2" />
+  <path d="M72 125 Q78 120 78 126" stroke="#2F6B4F" stroke-width="1" fill="#EAF3EE" />
+  <path d="M85 113 Q91 108 91 114" stroke="#2F6B4F" stroke-width="1" fill="#EAF3EE" />
+  <path d="M95 105 Q102 101 101 107" stroke="#2F6B4F" stroke-width="1" fill="#EAF3EE" />
+</svg>
+

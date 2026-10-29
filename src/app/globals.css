@@ -103,34 +103,6 @@ h1, h2, h3, h4, h5, h6 {
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-/* Stacked Paper Effect for Hero: 2 subtle offset sheets behind */
-.stacked-paper {
-  position: relative;
-  z-index: 1;
-}
-.stacked-paper::before,
-.stacked-paper::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: -1;
-  transition: transform 200ms ease;
-}
-.stacked-paper::before {
-  background-color: #F3ECE1;
-  border: 1px solid rgba(28, 25, 23, 0.08);
-  transform: translate(4px, 4px);
-  box-shadow: 0 2px 8px rgba(28, 25, 23, 0.04);
-}
-.stacked-paper::after {
-  background-color: #ECE3D4;
-  border: 1px solid rgba(28, 25, 23, 0.07);
-  transform: translate(8px, 8px);
-  box-shadow: 0 4px 12px rgba(28, 25, 23, 0.03);
-}
-
 /* 3. Linen / Woven Sidebar Texture (Bound spine of an invitation folder) */
 .sidebar-woven {
   background-color: #FAF7F2;
@@ -147,13 +119,17 @@ h1, h2, h3, h4, h5, h6 {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
 }
 
-/* 5. Foil Accents (Solid metallic base with subtle warm sheen, not rainbow gradient) */
-.foil-accent {
-  color: var(--color-foil);
+/* 5. Foil Accents (Two strictly separated variants: On-Dark #D9B65B vs On-Light #8A6A12) */
+.foil-accent,
+.foil-accent-dark {
+  color: var(--color-foil-dark, #D9B65B);
+}
+.foil-accent-light {
+  color: var(--color-foil-light, #8A6A12);
 }
 .foil-rule {
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, var(--color-foil) 25%, var(--color-foil) 75%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, var(--color-foil-dark, #D9B65B) 25%, var(--color-foil-dark, #D9B65B) 75%, transparent 100%);
   border: none;
 }
 
@@ -177,6 +153,7 @@ h1, h2, h3, h4, h5, h6 {
   background-image: 
     radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 1px, transparent 1px);
   background-size: 20px 20px;
+  z-index: 1;
 }
 
 /* 7. Double-Hairline Stationery Frame */
@@ -226,11 +203,6 @@ html[data-reduce-decoration="true"],
     background-image: none !important;
   }
 
-  .stacked-paper::before,
-  .stacked-paper::after {
-    display: none !important;
-  }
-
   .paper-sheet-hover:hover {
     transform: none !important;
   }
@@ -240,8 +212,13 @@ html[data-reduce-decoration="true"],
     text-shadow: none !important;
   }
 
-  .foil-accent {
-    color: var(--color-foil-flat) !important;
+  .foil-accent-dark {
+    color: var(--color-foil-dark, #D9B65B) !important;
+  }
+
+  .foil-accent,
+  .foil-accent-light {
+    color: var(--color-foil-light, #8A6A12) !important;
   }
 
   .foil-rule {

@@ -129,6 +129,7 @@ export async function generateEventPlanIdeas(
         activities: Array.isArray(json.activities) && json.activities.length > 0 ? json.activities : fallback.activities,
         decor: Array.isArray(json.decor) && json.decor.length > 0 ? json.decor : fallback.decor,
         dayTimeline: Array.isArray(json.dayTimeline) && json.dayTimeline.length > 0 ? json.dayTimeline : fallback.dayTimeline,
+        vendorQuestions: Array.isArray(json.vendorQuestions) && json.vendorQuestions.length > 0 ? json.vendorQuestions : fallback.vendorQuestions,
         provenance: {
           source: 'gemini',
           modelId: model,

@@ -4,8 +4,9 @@ Occasio is tested against WCAG 2.2 Level AA accessibility standards, combining a
 
 ---
 
-## 1. Verified Contrast Ratios (WCAG AA: 4.5:1 normal, 3:1 large)
+## 1. Verified Contrast Ratios & Pixel-Truth Gate
 
+### Token & Procedural Noise Calculations
 Every theme color token pair was verified with mathematical luminescence testing across all three event modes (`wedding`, `birthday`, `community`) via `npm run test:contrast`. **57/57 checks passed (100% compliance)**, including worst-case procedural noise and texture compositing.
 
 | Token Pair | Background Token | Measured Contrast | Target | Result |
@@ -22,6 +23,15 @@ Every theme color token pair was verified with mathematical luminescence testing
 | `--color-success` (`#166534`) | `--color-paper` (`#FAF7F2`) | **6.3:1** | ≥ 4.5:1 (AA) | **PASS (Exceeds AAA)** |
 | Composited Noise Ink | Paper + 5% procedural grain | **15.0:1** | ≥ 4.5:1 (AA) | **PASS (Exceeds AAA)** |
 | Composited Hero Ivory | Hero + 6% dark weave texture | **10.8:1** | ≥ 4.5:1 (AA) | **PASS (Exceeds AAA)** |
+
+### Pixel-Truth Rendered Contrast Gate (`pixel_contrast.spec.ts`)
+Going beyond theoretical token formulas, Occasio implements an end-to-end pixel-truth contrast gate using Playwright and Sharp image analysis:
+1. Records the computed font size, font weight, and computed color for every visible text element in the viewport.
+2. Temporarily hides the text (`color: transparent`) without altering layout geometry and captures a raw bounding box screenshot.
+3. Computes the median RGB background color of the actual rendered pixels behind each character.
+4. Calculates real relative luminance and asserts WCAG AA (≥ 4.5:1 for normal text, ≥ 3.0:1 for 24px+ or 19px+ bold text).
+5. Tests across Wedding, Birthday, and Community themes, and under reduce-decoration mode.
+6. Enforces zero console warnings or errors across all views. Result: **5/5 test suites passed, 0 violations**.
 
 ---
 

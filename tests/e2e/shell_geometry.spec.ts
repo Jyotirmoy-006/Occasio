@@ -79,6 +79,29 @@ test.describe('A1 & G: Shell Geometry & Non-Collision Tests', () => {
       expect(hasHorizontalScroll).toBe(false);
     });
   }
+
+  for (const width of [1280, 1440, 1850, 2560]) {
+    test(`asserts at least 24px clearance between last header control and viewport edge at ${width}px (P0-4)`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('/');
+      await page.waitForLoadState('networkidle');
+
+      const clearance = await page.evaluate(() => {
+        const header = document.querySelector('header');
+        if (!header) return null;
+        const buttons = Array.from(header.querySelectorAll('button'));
+        if (buttons.length === 0) return null;
+        const lastButton = buttons[buttons.length - 1];
+        const rect = lastButton.getBoundingClientRect();
+        return window.innerWidth - rect.right;
+      });
+
+      expect(clearance).not.toBeNull();
+      expect(clearance!).toBeGreaterThanOrEqual(24);
+    });
+  }
 });
 
 test.describe('A2 & G: Onboarding Modal Geometry & Fit', () => {
@@ -192,5 +215,80 @@ test.describe('G: Accessibility & Keyboard Workflows', () => {
     );
 
     expect(seriousOrCritical).toEqual([]);
+  });
+
+  test('asserts Overview section numerals appear strictly sequential [I., II., III., IV., V.] with increasing y coordinates', async ({ page }) => {
+    // 1. Verify single-column sequential order & strictly increasing y-coordinates at 768px and 360px
+    for (const width of [768, 360]) {
+      await page.setViewportSize({ width, height: 1200 });
+      await page.goto('/');
+      await page.waitForLoadState('networkidle');
+
+      const headings = await page.evaluate(() => {
+        const leafElements = Array.from(document.querySelectorAll('*')).filter((el) => el.children.length === 0);
+        const numeralRegex = /^([IVX]+)\.\s+/;
+        const matches: { numeral: string; text: string; y: number }[] = [];
+
+        for (const el of leafElements) {
+          const text = (el.textContent || '').trim();
+          const m = text.match(numeralRegex);
+          if (m) {
+            const rect = el.getBoundingClientRect();
+            if (rect.width > 0 && rect.height > 0) {
+              matches.push({
+                numeral: `${m[1]}.`,
+                text,
+                y: rect.top + window.scrollY,
+              });
+            }
+          }
+        }
+        return matches;
+      });
+
+      const numerals = headings.map((h) => h.numeral);
+      expect(numerals).toEqual(['I.', 'II.', 'III.', 'IV.', 'V.']);
+
+      // Check strictly increasing y coordinates in linear / mobile flow
+      for (let i = 1; i < headings.length; i++) {
+        expect(headings[i].y).toBeGreaterThan(headings[i - 1].y);
+      }
+    }
+
+    // 2. Verify desktop (1440px) DOM order and column ordering
+    await page.setViewportSize({ width: 1440, height: 1200 });
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+
+    const desktopHeadings = await page.evaluate(() => {
+      const leafElements = Array.from(document.querySelectorAll('*')).filter((el) => el.children.length === 0);
+      const numeralRegex = /^([IVX]+)\.\s+/;
+      const matches: { numeral: string; text: string; y: number }[] = [];
+
+      for (const el of leafElements) {
+        const text = (el.textContent || '').trim();
+        const m = text.match(numeralRegex);
+        if (m) {
+          const rect = el.getBoundingClientRect();
+          if (rect.width > 0 && rect.height > 0) {
+            matches.push({
+              numeral: `${m[1]}.`,
+              text,
+              y: rect.top + window.scrollY,
+            });
+          }
+        }
+      }
+      return matches;
+    });
+
+    expect(desktopHeadings.map((h) => h.numeral)).toEqual(['I.', 'II.', 'III.', 'IV.', 'V.']);
+    // Col 1: I < II
+    expect(desktopHeadings[1].y).toBeGreaterThan(desktopHeadings[0].y);
+    // Col 2: III < IV
+    expect(desktopHeadings[3].y).toBeGreaterThan(desktopHeadings[2].y);
+    // Footer section: V > II and V > IV
+    expect(desktopHeadings[4].y).toBeGreaterThan(desktopHeadings[1].y);
+    expect(desktopHeadings[4].y).toBeGreaterThan(desktopHeadings[3].y);
   });
 });

@@ -11,6 +11,10 @@ export const IdeaItemSchema = z.object({
   dismissed: z.boolean().default(false),
   /** Marks this as AI-generated — rendered with a label in the UI. */
   isAIGenerated: z.boolean().default(true),
+  /** Distinct editorial style tags (e.g. ['Botanical', 'Intimate', 'Warm Organic']) */
+  styleTags: z.array(z.string()).optional(),
+  /** Optional course category for culinary ideas */
+  course: z.enum(['starter', 'main', 'dessert', 'drinks']).optional(),
 });
 
 export const ColorSwatchSchema = z.object({
@@ -37,6 +41,11 @@ export const DayTimelineItemSchema = z.object({
   notes: z.string().max(200).default(''),
 });
 
+export const VendorQuestionItemSchema = z.object({
+  vendorType: z.string(),
+  questions: z.array(z.string()),
+});
+
 export const ProvenanceSchema = z.object({
   source: z.enum(['gemini', 'demo_engine', 'user_edited']),
   modelId: z.string().optional(),
@@ -51,6 +60,7 @@ export const IdeasSchema = z.object({
   activities: z.array(IdeaItemSchema).max(10),
   decor: z.array(IdeaItemSchema).max(10),
   dayTimeline: z.array(DayTimelineItemSchema).max(20),
+  vendorQuestions: z.array(VendorQuestionItemSchema).default([]),
   provenance: ProvenanceSchema.optional(),
 });
 
@@ -60,5 +70,6 @@ export type IdeaItem = z.infer<typeof IdeaItemSchema>;
 export type ColorSwatch = z.infer<typeof ColorSwatchSchema>;
 export type ColorPalette = z.infer<typeof ColorPaletteSchema>;
 export type DayTimelineItem = z.infer<typeof DayTimelineItemSchema>;
+export type VendorQuestionItem = z.infer<typeof VendorQuestionItemSchema>;
 export type Ideas = z.infer<typeof IdeasSchema>;
 

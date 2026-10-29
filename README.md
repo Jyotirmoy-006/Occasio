@@ -1,6 +1,8 @@
 # Occasio — GenAI-Powered Event Planning Assistant
 *Editorial Event Logistics for Weddings, Birthdays & Community Gatherings*
 
+![Occasio Event Planning Assistant](docs/banner.webp)
+
 > **Pitch**: Occasio is a tactile, editorial event planning assistant that marries deterministic financial math and backward-planned schedules with Gemini-powered creative synthesis. Designed for real-world weddings, birthdays, and community gatherings, Occasio empowers planners with integer-precision budget rebalancing sliders, milestone Gantt roadmaps with iCalendar export, inquiry checklists across four vendor stages, and curated styling concepts—all operating under a local-first, zero-PII privacy architecture that works seamlessly both with live AI and in deterministic Demo Mode.
 
 ---
@@ -105,14 +107,14 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 | Command | Description |
 |---|---|
 | `npm run dev` | Start development server on port 3000 |
-| `npm run build` | Produce optimized Turbopack production build |
-| `npm run start` | Start production server |
-| `npm run test` | Run all 100 Vitest unit and core logic tests |
+| `npm run build` | Produce optimized production build |
+| `npm run start` | Start production server with dynamic nonce CSP |
+| `npm run test` | Run all 101 Vitest unit, domain, and core logic tests |
 | `npm run test:coverage` | Run test suite with V8 coverage enforcement (>85% AI layer branch coverage) |
 | `npm run test:contrast` | Mathematically verify WCAG 2.2 AA (≥ 4.5:1) across 57 token & composited pairs |
-| `npm run test:e2e` | Run all 25 Playwright E2E tests (geometry, tooltips, modals, mobile, 10 views axe-core) |
+| `npm run test:e2e` | Run all 34 Playwright E2E tests (pixel-truth contrast, geometry, tooltips, modals, axe-core) |
 | `npm run type-check` | Run strict TypeScript compiler verification (`tsc --noEmit`) |
-| `npm run size-check` | Fail if tracked repository files exceed 8 MB |
+| `npm run size-check` | Assert tracked repo < 8 MB and images < 2.5 MB (each < 150 KB) |
 | `npm audit` | Verify dependencies are free of high-severity vulnerabilities |
 
 ---

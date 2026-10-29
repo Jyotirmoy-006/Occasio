@@ -1,37 +1,51 @@
 :root {
-  /* Editorial Palette: Warm paper, deep ink, tactile tones */
-  --color-paper: #FAF7F2;
-  --color-paper-card: #FAF7F2;
+  /* 3-Level Surface System: Page is warm ivory, Cards are bright paper, Inset is soft tone */
+  --color-page: #F7F3EC;
+  --color-paper: #F7F3EC;
+  --color-card: #FFFDF8;
+  --color-paper-card: #FFFDF8;
+  --color-inset: #F1EADC;
+  --color-surface-sunken: #F1EADC;
+  --color-surface: #F1EADC;
+  --color-surface-raised: #FFFDF8;
+
   --color-ink: #1C1917;
-  --color-ink-muted: #5E5750; /* >= 5.5:1 WCAG AA contrast against #FAF7F2 */
-  --color-ink-subtle: #6E665E; /* >= 4.6:1 WCAG AA contrast */
-  --color-border: #E5DDD5;
-  --color-border-dark: #D4C7BA;
-  --color-border-sheet: rgba(28, 25, 23, 0.1);
-  --color-surface: #F5EFE6;
-  --color-surface-sunken: #EDE5D8;
-  --color-surface-raised: #EDE4D8;
+  --color-ink-muted: #57524C; /* >= 5.8:1 WCAG AA contrast against #F7F3EC and #FFFDF8 */
+  --color-ink-subtle: #68615A; /* >= 4.6:1 WCAG AA contrast */
+  --color-border: #E6DFD5;
+  --color-border-dark: #D1C7BA;
+  --color-border-sheet: rgba(28, 25, 23, 0.09);
+
+  /* Gold Foil System: On-Dark (#D9B65B) vs On-Light Antique (#8A6A12) */
+  --color-foil-dark: #D9B65B;
+  --color-foil-light: #8A6A12;
+  --color-foil: #D9B65B;
+  --color-foil-flat: #8A6A12;
 
   /* Default Wedding Accent: Deep forest green with warm ivory & gold */
-  --color-accent: #1B4D3E;
-  --color-accent-hover: #13382D;
-  --color-accent-subtle: rgba(27, 77, 62, 0.08);
-  --color-accent-highlight: #7A6230;
-  --color-hero-bg: #1B4434;
+  --color-accent: #17392C;
+  --color-accent-hover: #102920;
+  --color-accent-subtle: rgba(23, 57, 44, 0.08);
+  --color-accent-highlight: #8A6A12;
+  --color-hero-bg: #17392C;
   --color-hero-text: #FAF7F2;
-  --color-hero-muted: #D8D2C5;
-  --color-foil: #C59B27;
-  --color-foil-flat: #9A761B;
+  --color-hero-muted: #E2DBD0;
 
-  /* Status Colors (WCAG AA compliant against #FAF7F2) */
-  --color-success: #186333;
-  --color-success-bg: #E8F5EC;
-  --color-warning: #8A4500;
-  --color-warning-bg: #FEF3E2;
-  --color-error: #9E1C1C;
-  --color-error-bg: #FDF0F0;
+  /* Semantic Status Colors (Icons + Text, paired with tinted backgrounds passing >= 4.5:1) */
+  --color-success: #2F6B4F;
+  --color-success-bg: #EAF3EE;
+  --color-caution: #8A5A00;
+  --color-caution-bg: #FCF6E8;
+  --color-warning: #8A5A00;
+  --color-warning-bg: #FCF6E8;
+  --color-danger: #9B2C2C;
+  --color-danger-bg: #FDEEED;
+  --color-error: #9B2C2C;
+  --color-error-bg: #FDEEED;
+  --color-info: #1F5F7A;
+  --color-info-bg: #EBF4F8;
 
-  /* Typography: Editorial Serif + Clean Sans */
+  /* Typography: Editorial Serif + Clean Sans (Minimum body 15px, captions 13px) */
   --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
   --font-ui: 'Geist', system-ui, -apple-system, sans-serif;
   --font-mono: 'Geist Mono', monospace;
@@ -55,44 +69,50 @@
   --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Event-type themes: Wedding (forest green/ivory), Birthday (terracotta/gold), Community (deep teal/sand) */
+/* Event-type themes: Wedding (#17392C), Birthday (#7A3112), Community (#123F45) */
 [data-event-theme='wedding'],
 [data-event='wedding'] {
-  --color-accent: #1B4D3E;
-  --color-accent-hover: #13382D;
-  --color-accent-subtle: rgba(27, 77, 62, 0.08);
-  --color-accent-highlight: #7A6230;
-  --color-hero-bg: #1B4434;
+  --color-accent: #17392C;
+  --color-accent-hover: #102920;
+  --color-accent-subtle: rgba(23, 57, 44, 0.08);
+  --color-accent-highlight: #8A6A12;
+  --color-hero-bg: #17392C;
   --color-hero-text: #FAF7F2;
-  --color-hero-muted: #D8D2C5;
-  --color-foil: #C59B27;
-  --color-foil-flat: #9A761B;
+  --color-hero-muted: #E2DBD0;
+  --color-foil-dark: #D9B65B;
+  --color-foil-light: #8A6A12;
+  --color-foil: #D9B65B;
+  --color-foil-flat: #8A6A12;
 }
 
 [data-event-theme='birthday'],
 [data-event='birthday'] {
-  --color-accent: #9C411E;
-  --color-accent-hover: #7F3215;
-  --color-accent-subtle: rgba(156, 65, 30, 0.08);
-  --color-accent-highlight: #8A6014;
-  --color-hero-bg: #823415;
+  --color-accent: #7A3112;
+  --color-accent-hover: #5E250D;
+  --color-accent-subtle: rgba(122, 49, 18, 0.08);
+  --color-accent-highlight: #8A6A12;
+  --color-hero-bg: #7A3112;
   --color-hero-text: #FAF7F2;
-  --color-hero-muted: #EADCD1;
-  --color-foil: #D4AF37;
-  --color-foil-flat: #A3821C;
+  --color-hero-muted: #F2E3DA;
+  --color-foil-dark: #D9B65B;
+  --color-foil-light: #8A6A12;
+  --color-foil: #D9B65B;
+  --color-foil-flat: #8A6A12;
 }
 
 [data-event-theme='community'],
 [data-event='community'] {
-  --color-accent: #165359;
-  --color-accent-hover: #0F3D42;
-  --color-accent-subtle: rgba(22, 83, 89, 0.08);
-  --color-accent-highlight: #755928;
-  --color-hero-bg: #13464C;
+  --color-accent: #123F45;
+  --color-accent-hover: #0C2C30;
+  --color-accent-subtle: rgba(18, 63, 69, 0.08);
+  --color-accent-highlight: #8A6A12;
+  --color-hero-bg: #123F45;
   --color-hero-text: #FAF7F2;
-  --color-hero-muted: #D0DFE0;
-  --color-foil: #B8860B;
-  --color-foil-flat: #8B6508;
+  --color-hero-muted: #D5E7EA;
+  --color-foil-dark: #D9B65B;
+  --color-foil-light: #8A6A12;
+  --color-foil: #D9B65B;
+  --color-foil-flat: #8A6A12;
 }
 
 /* Accessibility: Respect Reduced Motion */

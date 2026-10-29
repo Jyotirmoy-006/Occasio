@@ -174,7 +174,7 @@ export function IdeasView() {
                           className="h-20 rounded-md p-2 flex flex-col justify-between text-[11px] font-mono shadow-sm transition-transform hover:scale-105"
                         >
                           <span className="font-bold truncate">{swatch.name}</span>
-                          <span className="opacity-90">{swatch.hex.toUpperCase()}</span>
+                          <span className="font-mono">{swatch.hex.toUpperCase()}</span>
                         </div>
                       ))}
                     </div>

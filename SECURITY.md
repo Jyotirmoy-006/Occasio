@@ -15,17 +15,26 @@ Occasio adheres to defense-in-depth principles across client, server, and AI int
 | **AI Payload Minimization** | High | Single-source-of-truth transmitted fields list (`AI_PAYLOAD_EXACT_FIELDS`). `eventName` is strictly omitted from AI generation payloads to prevent private event titles or personal identifiers from reaching Gemini endpoints. Verified by automated unit test `tests/unit/ai/payload_privacy.test.ts`. | `src/domain/schemas/plan.ts`, `src/lib/ai/prompts.ts` |
 | **Hallucinated Business Recommendations** | Medium | System instructions explicitly forbid generating real vendor phone numbers, ratings, or prices presented as fact. Domain checklist only produces vendor types. | `src/lib/ai/prompts.ts`, `src/domain/checklist/generate.ts` |
 
-## 2. Content Security Policy (CSP)
+## 2. Content Security Policy (CSP) & Nonce Architecture
 
-Occasio enforces strict HTTP security headers via `next.config.ts`:
+Occasio enforces strict, per-request nonce-based HTTP security headers via Next.js proxy middleware (`src/middleware.ts`):
 ```http
-Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none';
+Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-{nonce}' 'strict-dynamic'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none';
+X-Nonce: {base64-random-uuid}
 X-Frame-Options: DENY
 X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
 Referrer-Policy: strict-origin-when-cross-origin
 Permissions-Policy: camera=(), microphone=(), geolocation=()
 Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 ```
+
+### Key CSP Guarantees
+1. **Dynamic Per-Request Nonce**: Generated cryptographically on each server request in `src/middleware.ts` and propagated via `x-nonce` to `src/app/layout.tsx`.
+2. **Strict Dynamic**: `'strict-dynamic'` is enabled, disabling host-based script execution and ensuring only authenticated scripts with matching nonces can run.
+3. **Zero `unsafe-eval` in Production**: `unsafe-eval` is strictly forbidden in production builds (enabled only conditionally in development if required by HMR tooling).
+4. **Style Exception Justification**: `style-src 'unsafe-inline'` is currently retained exclusively for runtime CSS variable assignments (dynamic event theme tokens `--theme-hero-wedding`, `--theme-hero-birthday`, `--theme-hero-community`, and dynamic SVG segment dashoffsets). No external style sources or font services are permitted.
+5. **No Remote Assets**: `img-src` and `font-src` allow only `'self'`, self-hosted WOFF2 fonts, inline SVGs, and data/blob URIs. No third-party image hosts or CDNs.
 
 ## 3. Dependency Auditing
 

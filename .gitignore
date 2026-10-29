@@ -15,6 +15,7 @@
 /test-results/
 /playwright-report/
 /screenshots/
+/demo-out/
 *.report.json
 lighthouse*.json
 

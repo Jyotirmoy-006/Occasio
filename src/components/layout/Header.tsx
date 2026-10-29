@@ -131,83 +131,85 @@ export function Header() {
       </a>
 
       <header
-        className="hairline-b bg-paper sticky top-0 z-30 h-[72px] flex items-center justify-between px-4 sm:px-6 lg:px-8 w-full max-w-full"
+        className="hairline-b bg-paper sticky top-0 z-30 h-[72px] w-full px-4 sm:px-6 lg:px-8"
         role="banner"
       >
-        {/* Left: Mobile Brand & Active View Title */}
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0 shrink">
-          {/* Mobile-only logo mark */}
-          <div className="md:hidden flex items-center gap-2 shrink-0">
-            <div className="w-8 h-8 rounded-md bg-[var(--color-accent)] text-paper flex items-center justify-center font-serif text-lg font-bold select-none shrink-0 shadow-sm">
-              O
-            </div>
-            <span className="font-serif text-lg sm:text-xl font-bold tracking-tight text-ink hidden sm:inline truncate">
-              Occasio
-            </span>
-          </div>
-
-          {/* Desktop Breadcrumb/Title */}
-          <div className="hidden md:flex items-center gap-2 min-w-0">
-            <h1 className="font-serif text-xl font-semibold tracking-tight text-ink truncate">
-              {tabTitles[activeTab] || 'Planner'}
-            </h1>
-            {plan?.eventType && (
-              <span className="text-[11px] font-sans capitalize px-2 py-0.5 rounded-full bg-surface border border-border text-ink-muted shrink-0">
-                {plan.eventType}
+        <div className="max-w-[1360px] w-full mx-auto h-full flex items-center justify-between">
+          {/* Left: Mobile Brand & Active View Title */}
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 shrink">
+            {/* Mobile-only logo mark */}
+            <div className="md:hidden flex items-center gap-2 shrink-0">
+              <div className="w-8 h-8 rounded-md bg-[var(--color-accent)] text-paper flex items-center justify-center font-serif text-lg font-bold select-none shrink-0 shadow-sm">
+                O
+              </div>
+              <span className="font-serif text-lg sm:text-xl font-bold tracking-tight text-ink hidden sm:inline truncate">
+                Occasio
               </span>
-            )}
+            </div>
+
+            {/* Desktop Breadcrumb/Title */}
+            <div className="hidden md:flex items-center gap-2 min-w-0">
+              <h1 className="font-serif text-xl font-semibold tracking-tight text-ink truncate">
+                {tabTitles[activeTab] || 'Planner'}
+              </h1>
+              {plan?.eventType && (
+                <span className="text-[12px] font-sans font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-surface border border-border text-ink-muted shrink-0">
+                  {plan.eventType}
+                </span>
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Right Tools: Status Pill, Shortcuts, Export, New Plan */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0 flex-nowrap">
-          {/* Real State Status Pill with Popover (1C) */}
-          <StatusPillPopover
-            health={health}
-            onRefresh={() => fetchHealth(true)}
-            isChecking={isCheckingHealth}
-          />
+          {/* Right Tools: Status Pill, Shortcuts, Export, New Plan */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0 flex-nowrap">
+            {/* Real State Status Pill with Popover (1C) */}
+            <StatusPillPopover
+              health={health}
+              onRefresh={() => fetchHealth(true)}
+              isChecking={isCheckingHealth}
+            />
 
-          {/* Shortcuts Button - desktop/tablet (1A) */}
-          <div className="hidden sm:block">
-            <Tooltip content="Keyboard shortcuts (?)">
-              <button
-                type="button"
-                onClick={() => setIsShortcutsOpen(true)}
-                aria-label="Keyboard shortcuts, press ?"
-                className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-md hover:bg-surface text-ink-muted hover:text-ink transition-colors cursor-pointer border border-transparent hover:border-border focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
+            {/* Shortcuts Button - desktop/tablet (1A) */}
+            <div className="hidden sm:block">
+              <Tooltip content="Keyboard shortcuts (?)">
+                <button
+                  type="button"
+                  onClick={() => setIsShortcutsOpen(true)}
+                  aria-label="Keyboard shortcuts, press ?"
+                  className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-md hover:bg-surface text-ink-muted hover:text-ink transition-colors cursor-pointer border border-transparent hover:border-border focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
+                >
+                  <Keyboard className="w-4 h-4 stroke-[1.5]" />
+                </button>
+              </Tooltip>
+            </div>
+
+            {/* Export Action: Icon-only below 1024px, labeled text at 1024px+ (1B) */}
+            <Tooltip content="Export plan (CSV, ICS, JSON, PDF)">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setIsExportOpen(true)}
+                aria-label="Export plan"
+                className="gap-2 min-h-[44px] text-sm shrink-0 px-3"
               >
-                <Keyboard className="w-4 h-4 stroke-[1.5]" />
-              </button>
+                <Download className="w-4 h-4 stroke-[1.5]" />
+                <span className="hidden lg:inline font-sans">Export</span>
+              </Button>
             </Tooltip>
-          </div>
 
-          {/* Export Action: Icon-only below 1024px, labeled text at 1024px+ (1B) */}
-          <Tooltip content="Export plan (CSV, ICS, JSON, PDF)">
+            {/* New Plan Action */}
             <Button
-              variant="secondary"
+              variant="primary"
               size="sm"
-              onClick={() => setIsExportOpen(true)}
-              aria-label="Export plan"
-              className="gap-2 min-h-[44px] text-sm shrink-0 px-3"
+              onClick={() => setIsOnboardingOpen(true)}
+              aria-label="New Plan Wizard"
+              className="gap-1 min-h-[36px] sm:min-h-[44px] px-2.5 sm:px-3 text-xs sm:text-sm shrink-0"
             >
-              <Download className="w-4 h-4 stroke-[1.5]" />
-              <span className="hidden lg:inline font-sans">Export</span>
+              <Plus className="w-4 h-4 stroke-[1.5]" />
+              <span className="hidden sm:inline">New Plan</span>
+              <span className="sm:hidden">New</span>
             </Button>
-          </Tooltip>
-
-          {/* New Plan Action */}
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => setIsOnboardingOpen(true)}
-            aria-label="New Plan Wizard"
-            className="gap-1 min-h-[36px] sm:min-h-[44px] px-2.5 sm:px-3 text-xs sm:text-sm shrink-0"
-          >
-            <Plus className="w-4 h-4 stroke-[1.5]" />
-            <span className="hidden sm:inline">New Plan</span>
-            <span className="sm:hidden">New</span>
-          </Button>
+          </div>
         </div>
       </header>
 
