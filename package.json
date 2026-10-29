@@ -14,12 +14,12 @@
     "test:e2e": "playwright test",
     "size-check": "node scripts/size-check.mjs",
     "demo:voices": "python demo/generate_voices.py",
-    "demo:record": "node demo/record_full.mjs",
-    "demo:subs": "python demo/generate_subs.py",
-    "demo:audio": "python demo/build_audio.py",
-    "demo:build": "python demo/build_video.py",
-    "demo:youtube": "python demo/generate_youtube_desc.py",
-    "demo:verify": "python demo/verify_video.py",
+    "demo:record": "node demo/record_full_v2.mjs",
+    "demo:subs": "python demo/generate_subs_v2.py",
+    "demo:audio": "python demo/build_audio_v2.py",
+    "demo:build": "python demo/build_video_v2.py",
+    "demo:youtube": "python demo/generate_youtube_desc_v2.py",
+    "demo:verify": "python demo/verify_video_v2.py",
     "demo:all": "npm run demo:voices && npm run demo:record && npm run demo:subs && npm run demo:audio && npm run demo:build && npm run demo:youtube && npm run demo:verify"
   },
   "dependencies": {

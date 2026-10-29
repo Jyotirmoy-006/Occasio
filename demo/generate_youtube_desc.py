@@ -35,7 +35,7 @@ def main():
     lines = [
         "Occasio is an artisanal, AI-powered event planning companion for weddings, birthdays, and community festivals. It combines tested deterministic calculations for budgets and schedules with Google Gemini for rich creative ideas, ensuring every dollar and deadline adds up.",
         "",
-        "Repository: https://github.com/your-username/occasio",
+        "Repository: https://github.com/Jyotirmoy-006/Occasio",
         "Stack: Next.js 16 (App Router), Google Gemini 2.5 Flash, Tailwind CSS, Radix UI",
         "Narration: AI-generated voice (en-US-AndrewNeural via Microsoft Edge Speech Synthesis)",
         "",

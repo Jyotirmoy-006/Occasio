@@ -1,88 +1,135 @@
 {
   "voice": "en-US-AndrewNeural",
-  "rate": "-5%",
-  "repoUrl": "https://github.com/your-username/occasio",
+  "rate": "+0%",
+  "repoUrl": "https://github.com/Jyotirmoy-006/Occasio",
   "scenes": [
+    {
+      "id": "S0",
+      "title": "Cold Open",
+      "spokenText": "How many tabs does it take to plan a wedding? A budget spreadsheet, a checklist, a thread of vendor emails, and a deadline you forgot.",
+      "subtitleText": "How many tabs does it take to plan a wedding? A budget spreadsheet, a checklist, a thread of vendor emails, and a deadline you forgot.",
+      "action": "Stack of browser tab chips collapse into the Occasio wax monogram",
+      "minDuration": 9.0
+    },
     {
       "id": "S1",
       "title": "Title Card",
-      "spokenText": "Planning a wedding, a birthday, or a community festival means juggling budgets, deadlines, and vendors. Occasio brings it all into one clear plan.",
-      "subtitleText": "Planning a wedding, a birthday, or a community festival means juggling budgets, deadlines, and vendors. Occasio brings it all into one clear plan.",
-      "action": "Show editorial stationery title card with embossed seal and typography",
-      "minDuration": 9.5
+      "spokenText": "This is Occasio. It is a planning assistant for weddings, birthdays and community events. Budget, timeline, vendors and ideas, all in one place. Let us plan a wedding.",
+      "subtitleText": "This is Occasio. It's a planning assistant for weddings, birthdays and community events. Budget, timeline, vendors and ideas, all in one place. Let's plan a wedding.",
+      "action": "Editorial stationery title card with Budget, Timeline, Vendors, Ideas pillars",
+      "minDuration": 10.5
     },
     {
       "id": "S2",
-      "title": "Welcome and Wizard",
-      "spokenText": "Choose your event, set the date, guest count, and budget. A live preview shows how your money will be split, before any AI is involved.",
-      "subtitleText": "Choose your event, set the date, guest count, and budget. A live preview shows how your money will be split, before any AI is involved.",
-      "action": "Select Wedding, type neutral event name, choose date ~1 year out, 120 guests, adjust budget, watch live donut update",
-      "minDuration": 9.5
+      "title": "Welcome & Wizard",
+      "spokenText": "A hundred and twenty guests, thirty-five thousand dollars, about a year out. As you type, you can already see how the money gets split. No AI yet. Just math.",
+      "subtitleText": "A hundred and twenty guests, thirty-five thousand dollars, about a year out. As you type, you can already see how the money gets split. No AI yet. Just math.",
+      "action": "Select Wedding, type event name, 120 guests, 35,000 budget, watch live preview donut rebalance",
+      "minDuration": 10.5
     },
     {
       "id": "S3",
       "title": "Gemini Live Generation",
-      "spokenText": "Gemini then creates personalized ideas, while budgets and dates are calculated by tested code, so the numbers are always right. Your event name never leaves your device.",
-      "subtitleText": "Gemini then creates personalized ideas, while budgets and dates are calculated by tested code, so the numbers are always right. Your event name never leaves your device.",
-      "action": "Submit wizard, show loading state, arrive on Overview with AI live pill and Gemini provenance badge",
-      "minDuration": 10.5
+      "spokenText": "Then Gemini writes the creative parts of the plan. It never sees your event name, and you can check exactly what it does get. The totals and dates still come from tested code.",
+      "subtitleText": "Then Gemini writes the creative parts of the plan. It never sees your event name, and you can check exactly what it does get. The totals and dates still come from tested code.",
+      "action": "Expand exactly what is sent panel, click Generate Plan, wait for real Gemini output, hover AI live pill and provenance badge",
+      "minDuration": 12.0
     },
     {
-      "id": "S4",
-      "title": "Overview & Milestones",
-      "spokenText": "Your overview shows the countdown, the next deadlines, and your plan's health at a glance.",
-      "subtitleText": "Your overview shows the countdown, the next deadlines, and your plan's health at a glance.",
-      "action": "Highlight arch photo, countdown seal, tick off two milestones, show undo toast notification",
-      "minDuration": 6.5
-    },
-    {
-      "id": "S5",
-      "title": "Budget Rebalancing",
-      "spokenText": "Drag a slider, and every other category rebalances instantly, always adding up to your total.",
-      "subtitleText": "Drag a slider, and every other category rebalances instantly, always adding up to your total.",
-      "action": "Navigate to Budget & Sliders, drag two sliders, show dynamic rebalancing without budget drift",
-      "minDuration": 6.5
-    },
-    {
-      "id": "S6",
-      "title": "Timeline & Vendors",
-      "spokenText": "Milestones are planned backward from your date. Track each vendor from first contact to booked, and quotes feed your real spend.",
-      "subtitleText": "Milestones are planned backward from your date. Track each vendor from first contact to booked, and quotes feed your real spend.",
-      "action": "Navigate to Timeline Gantt view, shift milestone; open Vendor Pipeline, move vendor to Quoted and input quote",
-      "minDuration": 8.5
-    },
-    {
-      "id": "S7",
-      "title": "Creative Ideas",
-      "spokenText": "Get themes, palettes, and menus matched to your style and dietary needs.",
-      "subtitleText": "Get themes, palettes, and menus matched to your style and dietary needs.",
-      "action": "Navigate to Creative Ideas, highlight mood images, contrast-tested swatches, menu items, pin one idea",
-      "minDuration": 5.5
-    },
-    {
-      "id": "S8",
-      "title": "Planning Copilot",
-      "spokenText": "Ask the copilot to cut costs. It shows exactly what will change, and nothing happens until you confirm.",
-      "subtitleText": "Ask the copilot to cut costs. It shows exactly what will change, and nothing happens until you confirm.",
-      "action": "Navigate to Copilot, submit 'Cut the budget by ten percent but keep photography', preview visual diff, Confirm, then Undo",
+      "id": "S3b",
+      "title": "Demo Mode Fallback",
+      "spokenText": "If the AI is ever unavailable, or there is no key, a built-in demo engine takes over and the app tells you.",
+      "subtitleText": "If the AI is ever unavailable, or there's no key, a built-in demo engine takes over and the app tells you.",
+      "action": "Switch to port 3001 demo server, click Demo mode: no API key pill, show accessible popover with Check again button",
       "minDuration": 7.5
     },
     {
+      "id": "S4",
+      "title": "Event Overview & Milestones",
+      "spokenText": "This is your plan. A countdown, your next deadlines, and a warning if something slips. Tick one off, and you can undo it.",
+      "subtitleText": "This is your plan. A countdown, your next deadlines, and a warning if something slips. Tick one off, and you can undo it.",
+      "action": "Arched hero photo, countdown medallion, tick off two milestones, show undo toast notification",
+      "minDuration": 8.0
+    },
+    {
+      "id": "S5",
+      "title": "Budget Dynamic Rebalancing",
+      "spokenText": "In the budget view, drag the venue up and the other categories make room. Do it again with catering. The total never changes.",
+      "subtitleText": "In the budget view, drag the venue up and the other categories make room. Do it again with catering. The total never changes.",
+      "action": "Navigate to Budget & Sliders, drag Venue slider up, drag Catering, show zero budget drift",
+      "minDuration": 8.5
+    },
+    {
+      "id": "S6",
+      "title": "Timeline & Backward Scheduling",
+      "spokenText": "Deadlines are planned backward from the wedding date, grouped into phases. Shift one with a click, or view them on the Gantt chart.",
+      "subtitleText": "Deadlines are planned backward from the wedding date, grouped into phases. Shift one with a click, or view them on the Gantt chart.",
+      "action": "Timeline list view, click shift milestone stepper (+7d), toggle Gantt chart view",
+      "minDuration": 8.5
+    },
+    {
+      "id": "S6b",
+      "title": "Vendor Pipeline & Questions",
+      "spokenText": "Each vendor moves from first contact to booked, with the right questions to ask along the way. Enter a quote and your real spend updates.",
+      "subtitleText": "Each vendor moves from first contact to booked, with the right questions to ask along the way. Enter a quote and your real spend updates.",
+      "action": "Navigate to Vendor Pipeline, expand Essential Questions To Ask, change stage to Quoted, type quote, show budget ledger update",
+      "minDuration": 9.5
+    },
+    {
+      "id": "S7",
+      "title": "Creative Ideas & Regeneration",
+      "spokenText": "In the ideas tab you get themes, palettes and a menu that follows your dietary needs. Not feeling one? Regenerate just that idea, and pin the ones you keep.",
+      "subtitleText": "In the ideas tab you get themes, palettes and a menu that follows your dietary needs. Not feeling one? Regenerate just that idea, and pin the ones you keep.",
+      "action": "Navigate to Ideas, click Regenerate this theme button, watch content refresh, click Pin theme",
+      "minDuration": 10.0
+    },
+    {
+      "id": "S8",
+      "title": "Planning Copilot & Diff",
+      "spokenText": "Need to cut costs? Ask the copilot. It shows exactly what would change, and nothing happens until you confirm. And you can always undo.",
+      "subtitleText": "Need to cut costs? Ask the copilot. It shows exactly what would change, and nothing happens until you confirm. And you can always undo.",
+      "action": "Ask copilot to cut total budget by 10%, review color-coded parameter diff preview, click Confirm, then click Undo",
+      "minDuration": 9.5
+    },
+    {
       "id": "S9",
-      "title": "Themes & Accessibility",
-      "spokenText": "Fully keyboard accessible, and every event type has its own look.",
-      "subtitleText": "Fully keyboard accessible, and every event type has its own look.",
-      "action": "Press Ctrl+K command palette, keyboard navigate, switch theme to Birthday and Community",
-      "minDuration": 5.0
+      "title": "Scenario Compare",
+      "spokenText": "What if you invite fifty fewer guests? Duplicate the plan, change the number, and compare both side by side.",
+      "subtitleText": "What if you invite fifty fewer guests? Duplicate the plan, change the number, and compare both side by side.",
+      "action": "Navigate to Scenario Compare, click Duplicate Plan, change guest count to 70, view side-by-side comparison tables",
+      "minDuration": 8.5
     },
     {
       "id": "S10",
+      "title": "Export & Portability",
+      "spokenText": "Take it with you. Print the plan, export the budget as a spreadsheet and the timeline to your calendar, or save a backup file.",
+      "subtitleText": "Take it with you. Print the plan, export the budget as a spreadsheet and the timeline to your calendar, or save a backup file.",
+      "action": "Open Export modal, highlight Print View, Export Budget CSV, Export Calendar .ICS, and Backup JSON buttons",
+      "minDuration": 8.5
+    },
+    {
+      "id": "S11",
+      "title": "Themes & Accessibility",
+      "spokenText": "Switch to a birthday or a community event and the whole look changes. Everything works from the keyboard. Control K opens a command palette, and there is a calmer mode with less decoration.",
+      "subtitleText": "Switch to a birthday or a community event and the whole look changes. Everything works from the keyboard. Control K opens a command palette, and there's a calmer mode with less decoration.",
+      "action": "Press Ctrl+K command palette, cycle theme to Birthday, then Community, then click Decoration Minimal toggle in sidebar footer",
+      "minDuration": 11.5
+    },
+    {
+      "id": "S12",
+      "title": "Quality Scorecard",
+      "spokenText": "Under the hood, it is covered by automated tests and accessibility checks on every screen. And the API key never leaves the server.",
+      "subtitleText": "Under the hood, it's covered by automated tests and accessibility checks on every screen. And the API key never leaves the server.",
+      "action": "Display live scorecard with verified test passes, axe-core 0 violations, zero audit vulnerabilities, and 3.02 MB size",
+      "minDuration": 8.5
+    },
+    {
+      "id": "S13",
       "title": "Closing Card",
-      "spokenText": "Private by design, accessible, tested, and open source. This is Occasio.",
-      "subtitleText": "Private by design, accessible, tested, and open source. This is Occasio.",
-      "action": "Show closing stationery card with GitHub repository link and tech stack badges",
-      "minDuration": 5.0
+      "spokenText": "That is Occasio. One place for the budget, the timeline, the vendors and the ideas. Plans are saved on your device, and the code is open source on GitHub.",
+      "subtitleText": "That's Occasio. One place for the budget, the timeline, the vendors and the ideas. Plans are saved on your device, and the code is open source on GitHub.",
+      "action": "Stationery closing card with repo link, Next.js 16 and Gemini model ID",
+      "minDuration": 9.0
     }
   ]
 }
-

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
 import './globals.css';
 import { PlanProvider } from '@/lib/context/PlanContext';
 import { TooltipProvider } from '@/components/ui/Tooltip';
@@ -13,13 +12,11 @@ export const metadata: Metadata = {
     'A GenAI-powered planning assistant organizing weddings, birthdays, and community events with budgets, timelines, vendor checklists, and personalized ideas.',
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const headersList = await headers();
-  const nonce = headersList.get('x-nonce') || undefined;
 
   return (
     <html lang="en" data-event-theme="wedding" data-event="wedding" className="paper-grain">
