@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { savePlan, loadPlan, loadAllPlans, deletePlan, exportPlanJSON, importPlanJSON } from '@/lib/storage/index';
 import { createDefaultBudget } from '@/domain/budget/allocation';
 import { generateTimeline } from '@/domain/timeline/generate';
@@ -72,6 +72,56 @@ describe('Storage and Serialization (localStorage)', () => {
 
   it('rejects malformed or invalid schema JSON', () => {
     expect(() => importPlanJSON('{ "invalid": true }')).toThrow();
+  });
+
+  it('handles corrupted JSON in localStorage gracefully without throwing', () => {
+    localStorage.setItem('occasio_plan_corrupted-id', '{invalid-json');
+    const result = loadPlan('corrupted-id');
+    expect(result).toBeNull();
+  });
+
+  it('handles non-object JSON values in localStorage gracefully', () => {
+    localStorage.setItem('occasio_plan_primitive-id', '"just a string"');
+    const result = loadPlan('primitive-id');
+    expect(result).toBeNull();
+  });
+
+  it('handles schema validation failure gracefully on loadPlan', () => {
+    localStorage.setItem('occasio_plan_bad-schema', JSON.stringify({
+      id: 'bad-schema',
+      schemaVersion: 1,
+      eventType: 'unknown_type',
+    }));
+    const result = loadPlan('bad-schema');
+    expect(result).toBeNull();
+  });
+
+  it('handles corrupted plan index gracefully in loadAllPlans', () => {
+    localStorage.setItem('occasio_plan_index', 'broken index string');
+    const all = loadAllPlans();
+    expect(all).toEqual([]);
+  });
+
+  it('handles storage quota exceeded errors gracefully in savePlan', () => {
+    const spy = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('QuotaExceededError');
+    });
+
+    const saved = savePlan(samplePlan);
+    expect(saved).toBe(false);
+
+    spy.mockRestore();
+  });
+
+  it('handles storage errors gracefully in deletePlan', () => {
+    const spy = vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
+      throw new Error('StorageError');
+    });
+
+    const deleted = deletePlan('any-id');
+    expect(deleted).toBe(false);
+
+    spy.mockRestore();
   });
 });
 
