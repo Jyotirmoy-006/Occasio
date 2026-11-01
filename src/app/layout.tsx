@@ -9,6 +9,7 @@ import { TooltipProvider } from '@/components/ui/Tooltip';
 import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { MobileNav } from '@/components/layout/MobileNav';
+import { Analytics } from '@vercel/analytics/next';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,6 +48,7 @@ export default async function RootLayout({
             <MobileNav />
           </PlanProvider>
         </TooltipProvider>
+        <Analytics />
       </body>
     </html>
   );
