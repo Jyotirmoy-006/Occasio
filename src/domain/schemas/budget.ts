@@ -5,6 +5,8 @@
  */
 import { z } from 'zod';
 
+z.config({ jitless: true });
+
 export const BudgetCategorySchema = z.object({
   id: z.string(),
   label: z.string().min(1).max(60),

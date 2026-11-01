@@ -4,6 +4,8 @@
  * prices as facts. quoteMinorUnits is user-entered, not AI-generated.
  */
 import { z } from 'zod';
+
+z.config({ jitless: true });
 import { MAX_NOTES_LENGTH, MAX_CHECKLIST_QUESTIONS, VENDOR_STATUSES } from '@/lib/constants';
 
 export const VendorStatusSchema = z.enum(VENDOR_STATUSES);

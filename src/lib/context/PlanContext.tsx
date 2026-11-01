@@ -1,5 +1,9 @@
 'use client';
 
+import { z } from 'zod';
+
+z.config({ jitless: true });
+
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { Plan } from '@/domain/schemas/plan';
 import { savePlan, loadPlan, loadAllPlans } from '@/lib/storage';

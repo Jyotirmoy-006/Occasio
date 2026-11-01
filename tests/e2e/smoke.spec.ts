@@ -154,7 +154,8 @@ test.describe('Smoke & CSP Nonce Regression Suite', () => {
     await expect(shortcutsDialog).not.toBeVisible();
 
     // 7. Final Assertions: Ensure zero runtime errors or violations throughout interactive session
-    expect(cspViolations, 'Expected zero securitypolicyviolation events').toEqual([]);
+    const browserCspViolations = await page.evaluate(() => (window as any).__cspViolations || []);
+    expect([...cspViolations, ...browserCspViolations], 'Expected zero securitypolicyviolation events').toEqual([]);
     expect(consoleErrors, 'Expected zero browser console errors').toEqual([]);
     expect(pageErrors, 'Expected zero uncaught page errors').toEqual([]);
     expect(failedRequests, 'Expected zero failed same-origin HTTP requests').toEqual([]);

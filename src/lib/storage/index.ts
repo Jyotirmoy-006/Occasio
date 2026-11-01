@@ -6,6 +6,8 @@
  */
 
 import { z } from 'zod';
+
+z.config({ jitless: true });
 import { PlanSchema } from '@/domain/schemas/plan';
 import type { Plan } from '@/domain/schemas/plan';
 import { SCHEMA_VERSION } from '@/lib/constants';

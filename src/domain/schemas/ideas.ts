@@ -4,6 +4,8 @@
  */
 import { z } from 'zod';
 
+z.config({ jitless: true });
+
 export const IdeaItemSchema = z.object({
   id: z.string(),
   content: z.string().max(500),

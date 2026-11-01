@@ -4,6 +4,8 @@
  */
 import { z } from 'zod';
 
+z.config({ jitless: true });
+
 export const MilestoneStatusSchema = z.enum(['pending', 'in-progress', 'done', 'completed', 'skipped']);
 
 export const MilestoneSchema = z.object({
