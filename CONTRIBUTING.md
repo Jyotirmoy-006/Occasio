@@ -72,3 +72,4 @@ npm run test:e2e
 - **Pure Domain Logic**: All mathematical, scheduling, and formatting functions in `src/domain/` must remain pure functions with zero React or browser DOM dependencies.
 - **Strict CSP Compliance**: Never introduce `eval()`, `new Function()`, or inline scripts without cryptographic nonces. All Zod modules must maintain `z.config({ jitless: true })`.
 - **Atomic Conventional Commits**: Structure commit messages using standard prefixes: `feat:`, `fix:`, `refactor:`, `test:`, `docs:`, `chore:`.
+

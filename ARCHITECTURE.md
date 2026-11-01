@@ -139,3 +139,4 @@ State is managed locally through `PlanContext` (`src/lib/context/PlanContext.tsx
 - **Bounded Navigation**: `canUndo` and `canRedo` flags dictate keyboard and UI operations (`Ctrl+Z`, `Ctrl+Y`).
 - **Scenario Branching**: `duplicatePlanForScenario` deep-clones the active plan into an independent `scenarioPlan` instance for side-by-side comparison without altering the original baseline.
 - **Autosave & Hydration**: Changes automatically persist to `localStorage` through `savePlan`.
+
