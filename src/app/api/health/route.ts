@@ -31,7 +31,13 @@ export function classifyAiError(err: unknown): {
   sanitizedClass: string;
 } {
   const msg = err instanceof Error ? err.message : String(err);
-  const status = (err as { status?: number })?.status;
+  const status =
+    typeof err === 'object' &&
+    err !== null &&
+    'status' in err &&
+    typeof Reflect.get(err, 'status') === 'number'
+      ? Number(Reflect.get(err, 'status'))
+      : undefined;
 
   if (
     status === 400 ||

@@ -27,12 +27,21 @@ export const DEBOUNCE_SEARCH_MS = 300;
 
 export const EVENT_TYPES = ['wedding', 'birthday', 'community'] as const;
 export type EventType = (typeof EVENT_TYPES)[number];
+export function isEventType(value: unknown): value is EventType {
+  return typeof value === 'string' && EVENT_TYPES.some((t) => t === value);
+}
 
 export const VENDOR_STATUSES = ['to-contact', 'contacted', 'quoted', 'booked'] as const;
 export type VendorStatus = (typeof VENDOR_STATUSES)[number];
+export function isVendorStatus(value: unknown): value is VendorStatus {
+  return typeof value === 'string' && VENDOR_STATUSES.some((s) => s === value);
+}
 
 export const MILESTONE_STATUSES = ['pending', 'in-progress', 'done', 'skipped'] as const;
 export type MilestoneStatus = (typeof MILESTONE_STATUSES)[number];
+export function isMilestoneStatus(value: unknown): value is MilestoneStatus {
+  return typeof value === 'string' && MILESTONE_STATUSES.some((s) => s === value);
+}
 
 export const SUPPORTED_CURRENCIES = [
   'USD',
@@ -47,4 +56,8 @@ export const SUPPORTED_CURRENCIES = [
   'ZAR',
 ] as const;
 export type Currency = (typeof SUPPORTED_CURRENCIES)[number];
+export function isCurrency(value: unknown): value is Currency {
+  return typeof value === 'string' && SUPPORTED_CURRENCIES.some((c) => c === value);
+}
+
 

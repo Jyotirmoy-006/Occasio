@@ -8,11 +8,11 @@ const eslintConfig = defineConfig([
   {
     files: ["src/**/*.{ts,tsx}"],
     rules: {
-      "complexity": ["error", { max: 25 }],
+      "complexity": ["error", { max: 15 }],
       "max-lines-per-function": [
         "error",
         {
-          max: 440,
+          max: 120,
           skipBlankLines: true,
           skipComments: true,
           IIFEs: true,

@@ -65,6 +65,26 @@ export function formatPercent(value: number, decimals = 1): string {
 }
 
 /**
+ * Normalizes European and US number formatting (commas vs dots).
+ */
+function normalizeNumberString(cleaned: string): string {
+  if (cleaned.includes(',') && cleaned.includes('.')) {
+    const lastComma = cleaned.lastIndexOf(',');
+    const lastDot = cleaned.lastIndexOf('.');
+    return lastComma < lastDot
+      ? cleaned.replace(/,/g, '')
+      : cleaned.replace(/\./g, '').replace(',', '.');
+  }
+  if (cleaned.includes(',')) {
+    const parts = cleaned.split(',');
+    return parts.length === 2 && parts[1]?.length === 2
+      ? cleaned.replace(',', '.')
+      : cleaned.replace(/,/g, '');
+  }
+  return cleaned;
+}
+
+/**
  * Parses a user-input string (e.g., "1,500.00") into minor units.
  * Strips currency symbols and formatting before parsing.
  * Returns null if the input cannot be parsed.
@@ -72,26 +92,10 @@ export function formatPercent(value: number, decimals = 1): string {
 export function parseInputToMinorUnits(input: string, currency: Currency): number | null {
   const trimmed = input.trim();
   if (!trimmed || trimmed.includes('-')) return null;
-  let cleaned = trimmed.replace(/[^\d.,]/g, '');
-  if (!cleaned) return null;
+  const rawCleaned = trimmed.replace(/[^\d.,]/g, '');
+  if (!rawCleaned) return null;
 
-  if (cleaned.includes(',') && cleaned.includes('.')) {
-    const lastComma = cleaned.lastIndexOf(',');
-    const lastDot = cleaned.lastIndexOf('.');
-    if (lastComma < lastDot) {
-      cleaned = cleaned.replace(/,/g, '');
-    } else {
-      cleaned = cleaned.replace(/\./g, '').replace(',', '.');
-    }
-  } else if (cleaned.includes(',')) {
-    const parts = cleaned.split(',');
-    if (parts.length === 2 && parts[1]?.length === 2) {
-      cleaned = cleaned.replace(',', '.');
-    } else {
-      cleaned = cleaned.replace(/,/g, '');
-    }
-  }
-
+  const cleaned = normalizeNumberString(rawCleaned);
   const parsed = parseFloat(cleaned);
   if (isNaN(parsed) || parsed < 0) return null;
   return majorToMinor(parsed, currency);

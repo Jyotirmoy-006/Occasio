@@ -10,6 +10,21 @@
 
 import { parseLocalDate } from '@/domain/timeline/generate';
 
+interface LocaleCurrencyRule {
+  currency: string;
+  matchTz?: (tz: string) => boolean;
+  matchLang?: (lang: string) => boolean;
+}
+
+const CURRENCY_RULES: LocaleCurrencyRule[] = [
+  { currency: 'GBP', matchTz: (tz) => tz.includes('Europe/London'), matchLang: (l) => l.startsWith('en-gb') },
+  { currency: 'EUR', matchTz: (tz) => tz.includes('Europe/'), matchLang: (l) => ['de', 'fr', 'es', 'it'].some((p) => l.startsWith(p)) },
+  { currency: 'INR', matchTz: (tz) => tz.includes('Asia/Kolkata'), matchLang: (l) => l.startsWith('hi') || l.endsWith('-in') },
+  { currency: 'AUD', matchTz: (tz) => tz.includes('Australia/'), matchLang: (l) => l.endsWith('-au') },
+  { currency: 'CAD', matchTz: (tz) => tz.includes('Canada/'), matchLang: (l) => l.endsWith('-ca') },
+  { currency: 'JPY', matchTz: (tz) => tz.includes('Tokyo'), matchLang: (l) => l.startsWith('ja') },
+];
+
 /**
  * Infer default currency from browser locale and timezone.
  * Safe to call on both server and client (falls back to USD).
@@ -20,14 +35,8 @@ export function inferDefaultCurrency(): string {
   try {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
     const lang = (navigator.language || '').toLowerCase();
-
-    if (tz.includes('Europe/London') || lang.startsWith('en-gb')) return 'GBP';
-    if (tz.includes('Europe/') || lang.startsWith('de') || lang.startsWith('fr') || lang.startsWith('es') || lang.startsWith('it')) return 'EUR';
-    if (tz.includes('Asia/Kolkata') || lang.startsWith('hi') || lang.endsWith('-in')) return 'INR';
-    if (tz.includes('Australia/') || lang.endsWith('-au')) return 'AUD';
-    if (tz.includes('Canada/') || lang.endsWith('-ca')) return 'CAD';
-    if (tz.includes('Tokyo') || lang.startsWith('ja')) return 'JPY';
-    return 'USD';
+    const matched = CURRENCY_RULES.find((r) => (r.matchTz && r.matchTz(tz)) || (r.matchLang && r.matchLang(lang)));
+    return matched?.currency ?? 'USD';
   } catch {
     return 'USD';
   }
@@ -45,6 +54,21 @@ export const SUPPORTED_CURRENCIES = [
   { code: 'INR', symbol: '₹', label: 'INR (₹) — Indian Rupee' },
   { code: 'JPY', symbol: '¥', label: 'JPY (¥) — Japanese Yen' },
 ] as const;
+
+function getFallbackCurrencySymbol(currency: string): string {
+  switch (currency.toUpperCase()) {
+    case 'EUR':
+      return '€';
+    case 'GBP':
+      return '£';
+    case 'INR':
+      return '₹';
+    case 'JPY':
+      return '¥';
+    default:
+      return '$';
+  }
+}
 
 /**
  * Formats minor units (cents) into a locale-aware currency string.
@@ -74,7 +98,7 @@ export function formatMoney(
     }).format(majorValue);
   } catch {
     // Fallback if currency code is unrecognized
-    const symbol = currency === 'EUR' ? '€' : currency === 'GBP' ? '£' : '$';
+    const symbol = getFallbackCurrencySymbol(currency);
     return `${symbol}${majorValue.toLocaleString('en-US', {
       minimumFractionDigits: fractionDigits,
       maximumFractionDigits: fractionDigits,
@@ -172,4 +196,3 @@ export function pluralize(
 
   return includeCount ? `${count} ${word}` : word;
 }
-

@@ -10,7 +10,7 @@ Event planning involves sensitive personal schedules, family preferences, guest 
 Occasio implements a local-first storage architecture utilizing browser `localStorage` as the primary persistence layer. No user account creation or login is required. All persisted records carry a `schemaVersion` integer. Upon reading from storage, records pass through sequential version migration functions before final Zod validation. Complete backup and restore are supported through encrypted or plaintext JSON import/export with file size caps (512 KB max).
 
 ## Consequences
-- **Positive**: 100% user privacy: zero PII or event details stored on remote servers.
+- **Positive**: 100% user privacy: event details and plans stored locally on the user's device, not on remote servers.
 - **Positive**: Instantaneous zero-latency read/write operations without network round-trips.
 - **Positive**: Offline functionality: existing plans can be reviewed, edited, and printed without an internet connection.
 - **Positive**: Schema versioning guarantees backwards compatibility as domain models evolve.

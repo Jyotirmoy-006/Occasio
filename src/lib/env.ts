@@ -4,12 +4,14 @@
  */
 import { z } from 'zod';
 
+const nodeEnvEnum = z.enum(['development', 'test', 'production']);
+
 const envSchema = z.object({
   GEMINI_API_KEY: z
     .string()
     .optional()
     .transform((s) => (s && s.trim().length >= 5 ? s.trim() : undefined)),
-  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  NODE_ENV: nodeEnvEnum.default('development'),
   RATE_LIMIT_MAX: z.coerce.number().int().positive().default(60),
   RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(60000),
 });
@@ -24,14 +26,18 @@ if (!_env.success) {
   }
 }
 
+function parseNodeEnv(val?: string): 'development' | 'test' | 'production' {
+  if (val === 'production' || val === 'test') return val;
+  return 'development';
+}
+
 export const env = _env.success
   ? _env.data
   : {
       GEMINI_API_KEY: process.env.GEMINI_API_KEY,
-      NODE_ENV: (process.env.NODE_ENV as 'development' | 'test' | 'production') || 'development',
+      NODE_ENV: parseNodeEnv(process.env.NODE_ENV),
       RATE_LIMIT_MAX: 60,
       RATE_LIMIT_WINDOW_MS: 60000,
     };
 
 export const IS_DEMO_MODE = !env.GEMINI_API_KEY;
-
