@@ -186,3 +186,4 @@ The following 20 packages are declared in `package.json` but have zero imports a
 - **Deterministic Math Core**: The Largest Remainder Method, integer minor currency calculations, and backward milestone scheduling algorithm remain intact.
 - **Live Models & Prompts**: The prompt structure and verified `gemini-3.5-flash-lite` model configuration remain untouched.
 - **Git Tags**: Existing `v1.0.0` release tag and release assets are strictly preserved.
+

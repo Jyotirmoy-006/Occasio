@@ -151,6 +151,21 @@ export function generateTimeline(eventType: EventType, eventDate: string): Timel
   const availableDays = Math.max(7, daysUntilEvent(eventDate));
   const availableWeeks = Math.max(1, availableDays / 7);
 
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  // Helper to ensure preparation deadlines land on an upcoming business weekday (Mon-Fri)
+  const getEarliestUpcomingWeekday = (d: Date): Date => {
+    const res = new Date(d.getTime());
+    const day = res.getDay();
+    if (day === 0) {
+      res.setDate(res.getDate() + 1); // Sunday -> Monday
+    } else if (day === 6) {
+      res.setDate(res.getDate() + 2); // Saturday -> Monday
+    }
+    return res;
+  };
+
   // Find max weeks in template
   const maxTemplateWeeks = Math.max(...templates.map((t) => t.weeksBeforeEvent), 1);
   const compressionRatio = availableWeeks < maxTemplateWeeks ? availableWeeks / maxTemplateWeeks : 1.0;
@@ -164,7 +179,13 @@ export function generateTimeline(eventType: EventType, eventDate: string): Timel
     rawDueDate.setDate(rawDueDate.getDate() - daysBefore);
 
     // Snap preparation milestones to business weekdays (celebration day itself retains targetDate)
-    const dueDate = daysBefore > 0 ? snapToWeekday(rawDueDate) : rawDueDate;
+    const candidateDate = daysBefore > 0 ? snapToWeekday(rawDueDate) : rawDueDate;
+    
+    // Guarantee deadlines never land in the past, and preparation milestones stay on business weekdays
+    const minDate = daysBefore > 0 ? getEarliestUpcomingWeekday(today) : today;
+    const dueDate = candidateDate.getTime() < minDate.getTime() 
+      ? (minDate.getTime() <= targetDate.getTime() ? minDate : candidateDate)
+      : candidateDate;
 
     return {
       id: `milestone-${idx + 1}-${tmpl.category}`,
