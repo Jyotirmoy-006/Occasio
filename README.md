@@ -112,13 +112,15 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 | Command | Description |
 |---|---|
+| `npm run check` | Run unified quality gate (lint, type-check, unit tests, size-check) |
 | `npm run dev` | Start development server on port 3000 |
 | `npm run build` | Produce optimized production build |
 | `npm run start` | Start production server with dynamic nonce CSP |
-| `npm run test` | Run all 101 Vitest unit, domain, and core logic tests |
+| `npm run test` | Run all 111 Vitest unit, domain, and core logic tests |
 | `npm run test:coverage` | Run test suite with V8 coverage enforcement (>85% AI layer branch coverage) |
 | `npm run test:contrast` | Mathematically verify WCAG 2.2 AA (≥ 4.5:1) across 57 token & composited pairs |
-| `npm run test:e2e` | Run all 34 Playwright E2E tests (pixel-truth contrast, geometry, tooltips, modals, axe-core) |
+| `npm run test:e2e` | Run all 36 Playwright E2E tests (pixel-truth contrast, geometry, tooltips, modals, axe-core) |
+| `npm run test:smoke` | Run Playwright live & local CSP nonce integrity and interactive regression test |
 | `npm run type-check` | Run strict TypeScript compiler verification (`tsc --noEmit`) |
 | `npm run size-check` | Assert tracked repo < 8 MB and images < 2.5 MB (each < 150 KB) |
 | `npm audit` | Verify dependencies are free of high-severity vulnerabilities |
@@ -142,17 +144,24 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Measured Performance & Testing Evidence
 
-- **Unit & Domain Tests**: **101 passed across 21 test suites** (100% pass rate).
+- **Unit & Domain Tests**: **111 passed across 21 test suites** (100% pass rate).
 - **AI Layer Branch Coverage**: **88.23% branch coverage** in `lib/ai/` (exceeding 85% requirement).
-- **Playwright E2E Tests**: **25 passed** (covering non-collision shell geometry at 1440/1024/768/360px, Radix tooltips and popovers across all viewports, horizontal overflow at 320–1440px, modal fit at 1366x768 and 360x640px, keyboard-only milestone toggle/undo, material richness smoke, mobile 360x640 flow, 500 fallback, and comprehensive axe scans).
-- **Lighthouse Mobile Audit (Production Build on Port 3001)**:
-  - **Performance**: **99 / 100** (FCP: 0.8s, LCP: 0.8s, TBT: 120ms, CLS: 0)
-  - **Accessibility**: **100 / 100**
-  - **Best Practices**: **100 / 100**
-  - **SEO**: **100 / 100**
+- **PlanContext & Storage Coverage**: **93.61% lines in PlanContext**, **98.55% lines in storage/index.ts**.
+- **Playwright E2E Tests**: **36 passed across 9 test files** (covering non-collision shell geometry at 1440/1024/768/360px, Radix tooltips and popovers across all viewports, horizontal overflow at 320–1440px, modal fit at 1366x768 and 360x640px, keyboard-only milestone toggle/undo, material richness smoke, mobile 360x640 flow, 500 fallback, and comprehensive axe scans).
+- **Lighthouse Audit Results**:
+  - **Live Deployed Site (`https://occasio-ochre.vercel.app`) under dynamic SSR and mobile CPU throttling**:
+    - **Performance**: **75 / 100** (FCP: 2.9s, LCP: 3.1s, TBT: 540ms, CLS: 0)
+    - **Accessibility**: **100 / 100**
+    - **Best Practices**: **96 / 100**
+    - **SEO**: **100 / 100**
+  - **Local Production Static Benchmark**:
+    - **Performance**: **99 / 100** (FCP: 0.8s, LCP: 0.8s, TBT: 120ms, CLS: 0)
+    - **Accessibility**: **100 / 100**
+    - **Best Practices**: **100 / 100**
+    - **SEO**: **100 / 100**
 - **Contrast Verification**: **57/57 token pairs and composited textures passed** (`npm run test:contrast`, all ≥ 4.5:1 against respective backgrounds and procedural noise).
 - **Automated Accessibility Scan**: **0 serious or critical violations** via `@axe-core/playwright` across 10 complete views and modal dialogs.
-- **Tracked Repository Size**: **3.03 MB** (well under the 8 MB guardrail limit).
+- **Tracked Repository Size**: **3.05 MB** (well under the 8 MB guardrail limit and 10 MB maximum).
 - **Security Audit**: **0 vulnerabilities** via `npm audit --audit-level=high`.
 - **TypeScript**: **0 errors** under `strict: true` (`tsc --noEmit`).
 - **Verified Live Models**: Tested and verified live with `@google/genai` using model **`gemini-3.5-flash-lite`** (primary, <3s latency, 100% first-attempt schema pass) and **`gemini-3.5-flash`**. Unverifiable `gemini-3.8-flash` (threw 503) was removed.

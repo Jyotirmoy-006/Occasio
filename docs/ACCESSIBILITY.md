@@ -78,15 +78,16 @@ Going beyond theoretical token formulas, Occasio implements an end-to-end pixel-
   - Scanned views: Overview (Wedding, Birthday, Community), Budget Allocation, Phased Timeline & Gantt, Vendor Pipeline & Quotes, Creative Ideas & Swatches, Planning Copilot, Scenario Comparison, Export Dialog, Shortcuts Dialog, and Reduce-Decoration Mode.
 - Surface opacity explicitly configured with solid `#FAF7F2` ensuring proper axe compositing over scrim overlays.
 
-### Lighthouse Mobile Audit (Production Build on Port 3001)
-Executed with Lighthouse CLI on simulated mobile viewport:
-- **Performance Score**: **99 / 100**
-- **Accessibility Score**: **100 / 100**
-- **Best Practices Score**: **100 / 100**
-- **SEO Score**: **100 / 100**
-- **First Contentful Paint (FCP)**: **0.8 s**
-- **Largest Contentful Paint (LCP)**: **0.8 s**
-- **Total Blocking Time (TBT)**: **120 ms**
-- **Cumulative Layout Shift (CLS)**: **0.000**
+### Lighthouse Mobile Audit
+- **Live Deployed Site (`https://occasio-ochre.vercel.app`) under dynamic SSR and mobile CPU throttling**:
+  - **Performance Score**: **75 / 100** (FCP: 2.9s, LCP: 3.1s, TBT: 540ms, CLS: 0)
+  - **Accessibility Score**: **100 / 100**
+  - **Best Practices Score**: **96 / 100**
+  - **SEO Score**: **100 / 100**
+- **Local Production Static Benchmark**:
+  - **Performance Score**: **99 / 100** (FCP: 0.8s, LCP: 0.8s, TBT: 120ms, CLS: 0.000)
+  - **Accessibility Score**: **100 / 100**
+  - **Best Practices Score**: **100 / 100**
+  - **SEO Score**: **100 / 100**
 
 

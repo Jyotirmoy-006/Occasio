@@ -12,8 +12,8 @@ This document provides direct mapping from each hackathon judging parameter to t
 | **Code Quality** | Centralized error handling, typed schemas as single source of truth | `src/domain/schemas/*.ts` | `tests/unit/storage/storage.test.ts` | 100% schema validation on all inputs, storage, and AI outputs |
 | **Security** | Zero secrets in repo/git, server-only AI SDK calls, prompt injection defense, strict CSP headers | `src/lib/ai/sanitize.ts`, `src/app/api/generate/route.ts`, `next.config.ts`, `SECURITY.md` | `tests/unit/sanitize/sanitize.test.ts`, `git log -S "key"`, `npm run size-check` | **0 vulnerabilities** via `npm audit`, API key isolated in `.env.local` |
 | **Security** | Safe JSON import (size cap, schema check) | `src/lib/storage/index.ts` | `tests/unit/storage/storage.test.ts` | Rejects payloads > 512 KB, parses only valid schemas |
-| **Efficiency** | Initial JS < 150 KB, memoized derivations, sub-8 MB repo size limit, sub-2.5 MB images | `scripts/size-check.mjs`, `next.config.ts`, `src/lib/storage/index.ts` | `npm run size-check`, `npm run build` | **0.87 MB tracked repo** (~10.8% of 8 MB ceiling), **Images 1.83 MB** (< 2.5 MB ceiling, all < 150 KB) |
-| **Testing** | 85%+ coverage on domain logic, 70%+ overall, unit + component + API + E2E tests | `tests/unit/**`, `tests/component/**`, `tests/e2e/**` | `npm run test` (vitest), `npm run test:e2e` (playwright) | **101 unit/component tests passed across 21 suites**, **34 E2E tests passed**, **88.23% branch coverage in lib/ai/**, **98.23% budget lines, 100% checklist lines, 100% export lines, 100% timeline lines** |
+| **Efficiency** | Initial JS < 150 KB, memoized derivations, sub-8 MB repo size limit, sub-2.5 MB images | `scripts/size-check.mjs`, `next.config.ts`, `src/lib/storage/index.ts` | `npm run size-check`, `npm run build` | **3.05 MB tracked repo** (under 8 MB ceiling and 10 MB limit), **Images 1.83 MB** (< 2.5 MB ceiling, all < 150 KB) |
+| **Testing** | 85%+ coverage on domain logic, 70%+ overall, unit + component + API + E2E tests | `tests/unit/**`, `tests/component/**`, `tests/e2e/**` | `npm run test` (vitest), `npm run test:e2e` (playwright) | **111 unit/component tests passed across 21 suites**, **36 E2E tests passed**, **88.23% branch coverage in lib/ai/**, **93.61% PlanContext lines, 98.55% storage lines, 98.23% budget lines, 100% checklist lines, 100% export lines, 100% timeline lines** |
 | **Accessibility** | Automated testing across views, no color-only status, keyboard alternatives for drag, 44px touch targets, AAA contrast | `src/styles/tokens.css`, `src/components/timeline/TimelineView.tsx`, `docs/ACCESSIBILITY.md` | `npm run test:contrast`, `npx playwright test tests/e2e/pixel_contrast.spec.ts`, axe-core | **57/57 contrast checks passed (≥ 4.5:1)**, **Pixel-truth gate: 0 violations across all themes & reduce-decoration**, **0 axe violations across all views/modals** |
 | **Problem Alignment** | 1. Budgets: interactive donut, linked sliders, integer math invariant, actual spend tracking | `src/domain/budget/allocation.ts`, `src/components/budget/BudgetView.tsx` | `tests/unit/budget/allocation.test.ts` | `sum(categories) === total` strictly preserved, zero floating point drift |
 | **Problem Alignment** | 2. Timelines: backward-planned from event date, Gantt + list views, countdown, .ICS export | `src/domain/timeline/generate.ts`, `src/domain/timeline/ics.ts`, `src/components/timeline/TimelineView.tsx` | `tests/unit/timeline/generate.test.ts`, `tests/unit/timeline/ics.test.ts` | RFC 5545 compliant calendar export, backward chronological milestones |
@@ -30,8 +30,9 @@ This document provides direct mapping from each hackathon judging parameter to t
 
 ### 1. Size Check (`npm run size-check`)
 ```
-Tracked repo size: 0.79 MB (825758 bytes)
-PASS: Under 8 MB limit.
+Images directory size: 1.83 MB (Limit: 2.50 MB, each < 150 KB)
+Tracked repo size: 3.05 MB (3202359 bytes)
+PASS: All size guardrails satisfied (well under 8 MB limit).
 ```
 
 ### 2. TypeScript Type Check (`npm run type-check`)
@@ -44,15 +45,17 @@ PASS: Under 8 MB limit.
 ### 3. Unit & Domain Tests (`npm run test`)
 ```
 Test Files  21 passed (21)
-     Tests  100 passed (100)
-  Duration  8.58s
+     Tests  111 passed (111)
+  Duration  14.35s
 Branch coverage in lib/ai: 88.23% (exceeds 85% requirement)
+Statement coverage: 93.76%
+Line coverage: 96.72%
 ```
 
 ### 4. Playwright End-to-End Suite (`npm run test:e2e`)
 ```
-Running 25 tests using 1 worker
-  25 passed (1.1m)
+Running 36 tests using 1 worker
+  36 passed (1.8m)
   - Non-collision bounding box assertions at 1440, 1024, 768, 360px
   - Zero horizontal overflow at 320, 360, 768, 1024, 1440px
   - Accessible Radix tooltips and popovers across all viewports
@@ -61,6 +64,7 @@ Running 25 tests using 1 worker
   - Happy paths for Wedding, Birthday, and Community
   - Mobile 360x640 flow and AI route 500 demo fallback
   - Axe-core zero serious/critical violations across 10 views and modals
+  - Strict Option A CSP nonce verification on all script tags
 ```
 
 ### 5. Contrast Verification (`npm run test:contrast`)
@@ -70,21 +74,16 @@ All theme color token pairs and worst-case composited textures exceed WCAG AA 4.
 ```
 
 ### 6. Production Lighthouse Mobile Audit
-```
-Performance: 99 / 100
-Accessibility: 100 / 100
-Best Practices: 100 / 100
-SEO: 100 / 100
-FCP: 0.8s, LCP: 0.8s, TBT: 120ms, CLS: 0.000
-```
-
-### 6. Lighthouse Mobile Audit (`http://localhost:3000`)
-```
-Performance: 92
-Accessibility: 100
-Best Practices: 100
-SEO: 100
-```
+- **Live Deployed Site (`https://occasio-ochre.vercel.app`) under dynamic SSR and mobile CPU throttling**:
+  - Performance: **75 / 100** (FCP: 2.9s, LCP: 3.1s, TBT: 540ms, CLS: 0)
+  - Accessibility: **100 / 100**
+  - Best Practices: **96 / 100**
+  - SEO: **100 / 100**
+- **Local Production Static Benchmark**:
+  - Performance: **99 / 100** (FCP: 0.8s, LCP: 0.8s, TBT: 120ms, CLS: 0.000)
+  - Accessibility: **100 / 100**
+  - Best Practices: **100 / 100**
+  - SEO: **100 / 100**
 
 ### 7. Security Audit (`npm audit --audit-level=high`)
 ```

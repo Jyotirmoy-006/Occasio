@@ -19,7 +19,7 @@ describe('PlanContext Unit Tests (Undo/Redo & Scenario)', () => {
   );
 
   const testPlan: Plan = {
-    id: '123e4567-e89b-42d3-a456-426614174000',
+    id: 'test-custom-plan-001',
     schemaVersion: 1,
     eventType: 'birthday',
     eventName: 'Custom Birthday Gala',
