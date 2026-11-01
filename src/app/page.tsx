@@ -1,14 +1,28 @@
 'use client';
 
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { usePlan } from '@/lib/context/PlanContext';
 import { OverviewView } from '@/components/overview/OverviewView';
-import { BudgetView } from '@/components/budget/BudgetView';
-import { TimelineView } from '@/components/timeline/TimelineView';
-import { ChecklistView } from '@/components/checklist/ChecklistView';
-import { IdeasView } from '@/components/ideas/IdeasView';
-import { CopilotView } from '@/components/copilot/CopilotView';
-import { ScenarioCompare } from '@/components/compare/ScenarioCompare';
+
+const BudgetView = dynamic(() => import('@/components/budget/BudgetView').then((m) => m.BudgetView), {
+  loading: () => <div className="py-12 text-center text-sm text-ink-muted">Loading budget...</div>,
+});
+const TimelineView = dynamic(() => import('@/components/timeline/TimelineView').then((m) => m.TimelineView), {
+  loading: () => <div className="py-12 text-center text-sm text-ink-muted">Loading timeline...</div>,
+});
+const ChecklistView = dynamic(() => import('@/components/checklist/ChecklistView').then((m) => m.ChecklistView), {
+  loading: () => <div className="py-12 text-center text-sm text-ink-muted">Loading checklist...</div>,
+});
+const IdeasView = dynamic(() => import('@/components/ideas/IdeasView').then((m) => m.IdeasView), {
+  loading: () => <div className="py-12 text-center text-sm text-ink-muted">Loading ideas...</div>,
+});
+const CopilotView = dynamic(() => import('@/components/copilot/CopilotView').then((m) => m.CopilotView), {
+  loading: () => <div className="py-12 text-center text-sm text-ink-muted">Loading copilot...</div>,
+});
+const ScenarioCompare = dynamic(() => import('@/components/compare/ScenarioCompare').then((m) => m.ScenarioCompare), {
+  loading: () => <div className="py-12 text-center text-sm text-ink-muted">Loading scenario comparison...</div>,
+});
 
 export default function HomePage() {
   const { activeTab, plan } = usePlan();

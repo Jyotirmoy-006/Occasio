@@ -56,9 +56,10 @@ export function OverviewHero({
           src={heroImg.src}
           alt={heroImg.alt}
           fill
-          sizes="(max-width: 768px) 100vw, 400px"
+          sizes="(max-width: 640px) calc(100vw - 48px), (max-width: 768px) calc(100vw - 80px), 400px"
           className="object-cover"
-          priority
+          preload
+          fetchPriority="high"
           placeholder="blur"
           blurDataURL={heroImg.blurDataUrl}
         />
@@ -117,7 +118,8 @@ export function OverviewHero({
                 width={800}
                 height={1000}
                 className="w-full h-full object-cover"
-                priority
+                preload
+                fetchPriority="high"
                 placeholder="blur"
                 blurDataURL={heroImg.blurDataUrl}
               />
@@ -138,4 +140,3 @@ export function OverviewHero({
     </section>
   );
 }
-

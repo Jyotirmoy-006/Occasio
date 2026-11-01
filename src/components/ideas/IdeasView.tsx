@@ -74,7 +74,7 @@ export function IdeasView() {
     };
 
     const options = alternativePrompts[section as string] || ['Curated bespoke concept tailored to your vision.'];
-    const randomChoice = options[Math.floor(Math.random() * options.length)] ?? options[0]!;
+    const randomChoice = options[Math.floor(Math.random() * options.length)] ?? options[0] ?? '';
 
     updatePlan((prev) => {
       const sectionData = prev.ideas[section];

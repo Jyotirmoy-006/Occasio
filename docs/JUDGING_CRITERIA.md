@@ -75,12 +75,12 @@ All theme color token pairs and worst-case composited textures exceed WCAG AA 4.
 
 ### 6. Production Lighthouse Mobile Audit
 - **Live Deployed Site (`https://occasio-ochre.vercel.app`) under dynamic SSR and mobile CPU throttling**:
-  - Performance: **75 / 100** (FCP: 2.9s, LCP: 3.1s, TBT: 540ms, CLS: 0)
+  - Performance: **76 / 100** (TTFB: 78ms, FCP: 1.38s, LCP: 3.19s, TBT: 630ms, CLS: 0)
   - Accessibility: **100 / 100**
-  - Best Practices: **96 / 100**
+  - Best Practices: **100 / 100**
   - SEO: **100 / 100**
-- **Local Production Static Benchmark**:
-  - Performance: **99 / 100** (FCP: 0.8s, LCP: 0.8s, TBT: 120ms, CLS: 0.000)
+- **Local Production Dynamic SSR Benchmark (Port 3000)**:
+  - Performance: **90 / 100** (TTFB: 23ms, FCP: 0.81s, LCP: 3.57s, TBT: 72ms, CLS: 0)
   - Accessibility: **100 / 100**
   - Best Practices: **100 / 100**
   - SEO: **100 / 100**

@@ -1,15 +1,23 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import { usePlan } from '@/lib/context/PlanContext';
 import { Button } from '@/components/ui/Button';
 import { Tooltip } from '@/components/ui/Tooltip';
 import { StatusPillPopover } from '@/components/layout/StatusPillPopover';
-import { OnboardingModal } from '@/components/onboarding/OnboardingModal';
-import { ExportModal } from '@/components/export/ExportModal';
-import { ShortcutsModal } from '@/components/ui/ShortcutsModal';
 import { Plus, Download, Keyboard } from 'lucide-react';
 import type { HealthResponse } from '@/app/api/health/route';
+
+const OnboardingModal = dynamic(() => import('@/components/onboarding/OnboardingModal').then((m) => m.OnboardingModal), {
+  ssr: false,
+});
+const ExportModal = dynamic(() => import('@/components/export/ExportModal').then((m) => m.ExportModal), {
+  ssr: false,
+});
+const ShortcutsModal = dynamic(() => import('@/components/ui/ShortcutsModal').then((m) => m.ShortcutsModal), {
+  ssr: false,
+});
 
 export function Header() {
   const { undo, redo, canUndo, canRedo, activeTab, plan } = usePlan();
