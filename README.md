@@ -3,7 +3,7 @@
 
 ![Occasio Event Planning Assistant](docs/banner.webp)
 
-> **Pitch**: Occasio is a tactile, editorial event planning assistant that marries deterministic financial math and backward-planned schedules with Gemini-powered creative synthesis. Designed for real-world weddings, birthdays, and community gatherings, Occasio empowers planners with integer-precision budget rebalancing sliders, milestone Gantt roadmaps with iCalendar export, inquiry checklists across four vendor stages, and curated styling concepts—all operating under a local-first, zero-PII privacy architecture that works seamlessly both with live AI and in deterministic Demo Mode.
+> **Pitch**: Occasio is a tactile, editorial event planning assistant that marries deterministic financial math and backward-planned schedules with Gemini-powered creative synthesis. Designed for real-world weddings, birthdays, and community gatherings, Occasio empowers planners with integer-precision budget rebalancing sliders, milestone Gantt roadmaps with iCalendar export, inquiry checklists across four vendor stages, and curated styling concepts—all operating under a local-first, privacy-minimized architecture that works seamlessly both with live AI and in deterministic Demo Mode.
 
 ---
 
@@ -130,7 +130,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ## Responsible AI & Safety Architecture
 
 - **Prompt Injection Defense**: All user text inputs are stripped of control characters and jailbreak tokens (`ignore previous instructions`, `roleplay as`, script tags) and wrapped in XML delimiters before prompt construction (`src/lib/ai/sanitize.ts`).
-- **Zero-PII Privacy: Exactly What Is Sent to Gemini**:
+- **Privacy Minimization: Exactly What Is Sent to Gemini**:
   - **What IS sent**: Event type (`wedding`, `birthday`, `community`), guest count, total budget number, target date, style/vibe keywords, and dietary requirement flags.
   - **What is NEVER sent**: The event title (`eventName`), planner names, personal guest lists, contact details, notes, or uploaded documents. The application inspect panel lets users verify the exact sanitized JSON payload dispatched to the API.
 - **Server-Side API Key Isolation**: The `GEMINI_API_KEY` never reaches client browsers; all inference requests route through authenticated Next.js server route handlers.
@@ -150,7 +150,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - **Playwright E2E Tests**: **36 passed across 9 test files** (covering non-collision shell geometry at 1440/1024/768/360px, Radix tooltips and popovers across all viewports, horizontal overflow at 320–1440px, modal fit at 1366x768 and 360x640px, keyboard-only milestone toggle/undo, material richness smoke, mobile 360x640 flow, 500 fallback, and comprehensive axe scans).
 - **Lighthouse Audit Results**:
   - **Live Deployed Site (`https://occasio-ochre.vercel.app`) under dynamic SSR and mobile CPU throttling**:
-    - **Performance**: **76 / 100** (TTFB: 78ms, FCP: 1.38s, LCP: 3.19s, TBT: 630ms, CLS: 0)
+    - **Performance**: **88 / 100** (TTFB: 78ms, FCP: 0.99s, LCP: 3.20s, TBT: 191ms, CLS: 0)
     - **Accessibility**: **100 / 100**
     - **Best Practices**: **100 / 100**
     - **SEO**: **100 / 100**

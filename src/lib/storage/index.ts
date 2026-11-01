@@ -164,7 +164,9 @@ function getIndex(): PlanIndex {
     const raw = localStorage.getItem(INDEX_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? (parsed as string[]) : [];
+    return Array.isArray(parsed) && parsed.every((x): x is string => typeof x === 'string')
+      ? parsed
+      : [];
   } catch {
     return [];
   }

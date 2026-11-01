@@ -2,12 +2,9 @@
 
 import React from 'react';
 import { AlertTriangle, CheckCircle2 } from 'lucide-react';
+import type { HealthAlert } from '@/domain/plan/health';
 
-export interface HealthAlert {
-  id: string;
-  type: 'warning' | 'info' | 'success';
-  message: string;
-}
+export type { HealthAlert };
 
 interface OverviewHealthSectionProps {
   healthAlerts: HealthAlert[];
@@ -31,12 +28,12 @@ export function OverviewHealthSection({ healthAlerts }: OverviewHealthSectionPro
           <li
             key={alert.id}
             className={`p-3.5 rounded-lg flex items-start gap-3 text-xs sm:text-sm leading-relaxed ${
-              alert.type === 'warning'
+              alert.type === 'warning' || alert.type === 'caution'
                 ? 'bg-[var(--color-caution-bg,#FCF6E8)] text-[var(--color-caution,#8A5A00)] border border-[var(--color-caution,#8A5A00)]/30'
                 : 'bg-[var(--color-success-bg,#EAF3EE)] text-[var(--color-success,#2F6B4F)] border border-[var(--color-success,#2F6B4F)]/30'
             }`}
           >
-            {alert.type === 'warning' ? (
+            {alert.type === 'warning' || alert.type === 'caution' ? (
               <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
             ) : (
               <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
@@ -48,4 +45,3 @@ export function OverviewHealthSection({ healthAlerts }: OverviewHealthSectionPro
     </div>
   );
 }
-

@@ -68,7 +68,7 @@ npm run test:e2e
 
 ## 4. Coding Standards
 
-- **Zero PII to External APIs**: Never include personal names, emails, addresses, or phone numbers in AI API payloads. All transmitted fields must adhere strictly to `AI_PAYLOAD_EXACT_FIELDS`.
+- **Privacy Minimization to External APIs**: Never include personal names, emails, addresses, or phone numbers in AI API payloads. All transmitted fields must adhere strictly to `AI_PAYLOAD_EXACT_FIELDS`.
 - **Pure Domain Logic**: All mathematical, scheduling, and formatting functions in `src/domain/` must remain pure functions with zero React or browser DOM dependencies.
 - **Strict CSP Compliance**: Never introduce `eval()`, `new Function()`, or inline scripts without cryptographic nonces. All Zod modules must maintain `z.config({ jitless: true })`.
 - **Atomic Conventional Commits**: Structure commit messages using standard prefixes: `feat:`, `fix:`, `refactor:`, `test:`, `docs:`, `chore:`.

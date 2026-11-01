@@ -7,14 +7,38 @@ import { RefreshCw, X, CheckCircle2, AlertTriangle, AlertCircle } from 'lucide-r
 import type { HealthResponse } from '@/app/api/health/route';
 
 interface StatusPillPopoverProps {
-  health: HealthResponse;
+  health: HealthResponse | null;
   onRefresh: () => Promise<void>;
   isChecking?: boolean;
+}
+
+function getStatusTheme(status?: HealthResponse['aiStatus']) {
+  if (status === 'live') {
+    return {
+      dotColor: 'bg-[#186333] shadow-[0_0_6px_rgba(24,99,51,0.6)]',
+      shortLabel: 'Live',
+      icon: <CheckCircle2 className="w-4 h-4 text-[#186333]" />,
+    };
+  }
+  if (status === 'demo_no_key') {
+    return {
+      dotColor: 'bg-[#8A4500]',
+      shortLabel: 'Demo',
+      icon: <AlertTriangle className="w-4 h-4 text-[#8A4500]" />,
+    };
+  }
+  return {
+    dotColor: 'bg-[#991B1B]',
+    shortLabel: 'AI Offline',
+    icon: <AlertCircle className="w-4 h-4 text-[#991B1B]" />,
+  };
 }
 
 export function StatusPillPopover({ health, onRefresh, isChecking = false }: StatusPillPopoverProps) {
   const [open, setOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+
+  if (!health) return null;
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -25,22 +49,7 @@ export function StatusPillPopover({ health, onRefresh, isChecking = false }: Sta
     }
   };
 
-  const isLive = health.aiStatus === 'live';
-  const isNoKey = health.aiStatus === 'demo_no_key';
-
-  const dotColor = isLive
-    ? 'bg-[#186333] shadow-[0_0_6px_rgba(24,99,51,0.6)]'
-    : isNoKey
-    ? 'bg-[#8A4500]'
-    : 'bg-[#991B1B]';
-
-  const statusIcon = isLive ? (
-    <CheckCircle2 className="w-4 h-4 text-[#186333]" />
-  ) : isNoKey ? (
-    <AlertTriangle className="w-4 h-4 text-[#8A4500]" />
-  ) : (
-    <AlertCircle className="w-4 h-4 text-[#991B1B]" />
-  );
+  const theme = getStatusTheme(health.aiStatus);
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
@@ -51,10 +60,10 @@ export function StatusPillPopover({ health, onRefresh, isChecking = false }: Sta
             className="group relative flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-surface border border-border text-[12px] font-medium text-ink hover:border-[var(--color-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] select-none shrink-0 cursor-pointer transition-colors"
             aria-label={`AI Status: ${health.label}. Click to view details and verify connection.`}
           >
-            <span className={`w-2 h-2 rounded-full shrink-0 ${dotColor}`} />
+            <span className={`w-2 h-2 rounded-full shrink-0 ${theme.dotColor}`} />
             <span className="hidden lg:inline font-sans truncate">{health.label}</span>
             <span className="lg:hidden font-sans text-[11px] truncate">
-              {isLive ? 'Live' : isNoKey ? 'Demo' : 'AI Offline'}
+              {theme.shortLabel}
             </span>
           </button>
         </Popover.Trigger>
@@ -71,7 +80,7 @@ export function StatusPillPopover({ health, onRefresh, isChecking = false }: Sta
           {/* Header */}
           <div className="flex items-center justify-between pb-3 hairline-b">
             <div className="flex items-center gap-2">
-              {statusIcon}
+              {theme.icon}
               <h3 className="font-serif text-sm font-semibold text-ink">
                 AI Service Status
               </h3>
@@ -134,4 +143,3 @@ export function StatusPillPopover({ health, onRefresh, isChecking = false }: Sta
     </Popover.Root>
   );
 }
-

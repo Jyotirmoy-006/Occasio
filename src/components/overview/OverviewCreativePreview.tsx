@@ -5,6 +5,7 @@ import Image from 'next/image';
 import type { ColorPalette, IdeaItem } from '@/domain/schemas/ideas';
 import { Button } from '@/components/ui/Button';
 import { ExternalLink } from 'lucide-react';
+import { OverviewPaletteStrip } from './OverviewPaletteStrip';
 
 interface OverviewCreativePreviewProps {
   provenanceLabel: string;
@@ -61,9 +62,7 @@ export function OverviewCreativePreview({
         </div>
       </div>
 
-      {/* 2-Column Showcase: Left Featured Mood Photo, Right Palette & Concepts */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-        {/* Left Column: Mood Image */}
         {featuredMood && (
           <div className="md:col-span-5 space-y-2">
             <div className="stationery-frame bg-[var(--color-card,#FFFDF8)]">
@@ -85,31 +84,9 @@ export function OverviewCreativePreview({
           </div>
         )}
 
-        {/* Right Column: Palette & Concepts */}
         <div className="md:col-span-7 space-y-5">
-          {/* 5-Color Palette Swatch Strip */}
-          {activePalette && (
-            <div className="space-y-2">
-              <span className="text-[12px] font-sans font-semibold uppercase tracking-wider text-ink-muted block">
-                Color Palette: {activePalette.name}
-              </span>
-              <div className="flex h-12 rounded-lg overflow-hidden border border-border shadow-xs">
-                {activePalette.swatches.map((swatch, idx) => (
-                  <div
-                    key={idx}
-                    style={{ backgroundColor: swatch.hex, color: swatch.textColor }}
-                    className="flex-1 flex flex-col items-center justify-center text-[12px] font-semibold px-1 select-none text-center"
-                    title={`${swatch.name} (${swatch.hex})`}
-                  >
-                    <span className="truncate max-w-full">{swatch.name}</span>
-                    <span className="text-[12px] opacity-80 uppercase tabular-nums">{swatch.hex}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          {activePalette && <OverviewPaletteStrip palette={activePalette} />}
 
-          {/* Theme Narrative Card */}
           {featuredTheme && (
             <div className="p-4 rounded-lg bg-[var(--color-inset,#F1EADC)] border border-border space-y-2">
               <div className="flex items-center justify-between gap-2">
@@ -132,7 +109,6 @@ export function OverviewCreativePreview({
             </div>
           )}
 
-          {/* Culinary Concepts */}
           {sampleMenu.length > 0 && (
             <div className="space-y-2">
               <span className="text-[12px] font-sans font-semibold uppercase tracking-wider text-ink-muted block">
@@ -159,4 +135,3 @@ export function OverviewCreativePreview({
     </section>
   );
 }
-

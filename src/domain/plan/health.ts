@@ -1,0 +1,162 @@
+/**
+ * Domain-layer plan health and metrics derivations.
+ * Pure functions with zero UI dependencies.
+ */
+
+import type { Plan } from '@/domain/schemas/plan';
+import type { Milestone } from '@/domain/schemas/timeline';
+import { PHASE_ORDER, getPhaseLabel } from '@/domain/timeline/generate';
+
+export interface HealthAlert {
+  id: string;
+  type: 'warning' | 'caution' | 'info' | 'success';
+  message: string;
+}
+
+export interface DonutSegment {
+  id: string;
+  label: string;
+  amountMinor: number;
+  percent: number;
+  color: string;
+}
+
+export const SEGMENT_COLORS = [
+  '#2D5016', // Forest / primary accent
+  '#8A6A12', // Antique gold / brass
+  '#7A3112', // Terracotta
+  '#1F5F7A', // Deep teal
+  '#57524C', // Ink muted
+  '#8A5A00', // Caution amber
+  '#A8A29E', // Warm stone / other
+];
+
+/**
+ * Computes rule-based health alerts for the plan.
+ */
+export function computePlanHealthAlerts(
+  plan: Plan,
+  daysRemaining: number,
+  todayStr: string,
+): HealthAlert[] {
+  const alerts: HealthAlert[] = [];
+  const committedMinor = plan.budget.categories.reduce((acc, c) => acc + c.actualMinorUnits, 0);
+  const totalBudgetMinor = plan.budgetMinorUnits;
+  const committedPercent = totalBudgetMinor > 0 ? Math.min(100, Math.round((committedMinor / totalBudgetMinor) * 100)) : 0;
+
+  const overdueMilestones = plan.timeline.milestones.filter(
+    (m) => (m.status === 'pending' || m.status === 'in-progress') && m.dueDate < todayStr,
+  );
+  if (overdueMilestones.length > 0) {
+    alerts.push({
+      id: 'overdue-milestones',
+      type: 'warning',
+      message: `${overdueMilestones.length} milestone${overdueMilestones.length > 1 ? 's are' : ' is'} past due date.`,
+    });
+  }
+
+  const venueCategory = plan.checklist.items.find(
+    (c) => c.category.toLowerCase().includes('venue') || c.vendorType.toLowerCase().includes('venue'),
+  );
+  if (venueCategory && venueCategory.status !== 'booked' && daysRemaining <= 60) {
+    alerts.push({
+      id: 'venue-unbooked',
+      type: 'warning',
+      message: `Critical path: Venue is not booked with ${daysRemaining} days left before the celebration.`,
+    });
+  }
+
+  if (committedPercent >= 90) {
+    alerts.push({
+      id: 'budget-warning',
+      type: 'warning',
+      message: `Committed spend has reached ${committedPercent}% of total planned budget.`,
+    });
+  }
+
+  const cateringCategory = plan.checklist.items.find(
+    (c) => c.category.toLowerCase().includes('catering') || c.vendorType.toLowerCase().includes('cater'),
+  );
+  if (cateringCategory && cateringCategory.status === 'to-contact' && daysRemaining <= 45) {
+    alerts.push({
+      id: 'catering-warning',
+      type: 'warning',
+      message: `Catering inquiries pending — tasting and booking contracts due within 45 days.`,
+    });
+  }
+
+  if (alerts.length === 0) {
+    alerts.push({
+      id: 'all-clear',
+      type: 'success',
+      message: 'Plan timeline and budget health are on track with no critical alerts.',
+    });
+  }
+
+  return alerts;
+}
+
+/**
+ * Groups active milestones by their phase label.
+ */
+export function groupMilestonesByPhase(
+  milestones: Milestone[],
+): Record<string, Milestone[]> {
+  const activeMilestones = milestones
+    .filter((m) => m.status === 'pending' || m.status === 'in-progress')
+    .sort((a, b) => a.dueDate.localeCompare(b.dueDate))
+    .slice(0, 5);
+
+  return PHASE_ORDER.reduce<Record<string, Milestone[]>>((acc, phaseName) => {
+    const items = activeMilestones.filter((m) => getPhaseLabel(m.phase) === phaseName);
+    if (items.length > 0) acc[phaseName] = items;
+    return acc;
+  }, {});
+}
+
+/**
+ * Computes donut segments for top categories.
+ */
+export function computeDonutSegments(plan: Plan): DonutSegment[] {
+  const totalBudgetMinor = plan.budgetMinorUnits;
+  const sorted = [...plan.budget.categories].sort((a, b) => b.allocatedMinorUnits - a.allocatedMinorUnits);
+  const top6 = sorted.slice(0, 6);
+  const remaining = sorted.slice(6);
+  const otherMinor = remaining.reduce((sum, c) => sum + c.allocatedMinorUnits, 0);
+
+  const segments: DonutSegment[] = top6.map((c, i) => ({
+    id: c.id,
+    label: c.label,
+    amountMinor: c.allocatedMinorUnits,
+    percent: totalBudgetMinor > 0 ? (c.allocatedMinorUnits / totalBudgetMinor) * 100 : 0,
+    color: SEGMENT_COLORS[i] || '#8FAF8F',
+  }));
+
+  if (remaining.length > 0 && otherMinor > 0) {
+    segments.push({
+      id: 'other',
+      label: 'Other Categories',
+      amountMinor: otherMinor,
+      percent: totalBudgetMinor > 0 ? (otherMinor / totalBudgetMinor) * 100 : 0,
+      color: SEGMENT_COLORS[6] || '#A8A29E',
+    });
+  }
+
+  return segments;
+}
+
+/**
+ * Returns provenance label string for display.
+ */
+export function getProvenanceLabel(plan: Plan): string {
+  if (plan.ideas.provenance?.source === 'demo_engine') {
+    return 'Demo engine';
+  }
+  if (plan.isAIGenerated) {
+    return `Generated by Gemini${plan.ideas.provenance?.modelId ? ` (${plan.ideas.provenance.modelId})` : ''}`;
+  }
+  if (plan.ideas.provenance?.source === 'user_edited') {
+    return 'Edited by you';
+  }
+  return 'Sample plan';
+}

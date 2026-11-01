@@ -1,15 +1,19 @@
 'use client';
 
-import { z } from 'zod';
-
-z.config({ jitless: true });
-
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { Plan } from '@/domain/schemas/plan';
-import { savePlan, loadPlan, loadAllPlans } from '@/lib/storage';
 import { SAMPLE_PLANS } from '@/domain/sample-plans';
+import { savePlan, loadAllPlans, loadPlan } from '@/lib/storage';
+import { usePlanHistory } from './usePlanHistory';
 
-export type PlanTab = 'overview' | 'budget' | 'timeline' | 'checklist' | 'ideas' | 'copilot' | 'compare';
+export type PlanTab =
+  | 'overview'
+  | 'budget'
+  | 'timeline'
+  | 'checklist'
+  | 'ideas'
+  | 'copilot'
+  | 'compare';
 
 interface PlanContextType {
   plan: Plan | null;
@@ -17,7 +21,7 @@ interface PlanContextType {
   activeTab: PlanTab;
   setActiveTab: (tab: PlanTab) => void;
   setPlan: (plan: Plan) => void;
-  updatePlan: (updater: (prev: Plan) => Plan, description?: string) => void;
+  updatePlan: (updater: (prev: Plan) => Plan) => void;
   duplicatePlanForScenario: () => void;
   updateScenarioPlan: (updater: (prev: Plan) => Plan) => void;
   clearScenarioPlan: () => void;
@@ -29,45 +33,35 @@ interface PlanContextType {
   allSavedPlans: Plan[];
   refreshSavedPlans: () => void;
   loadSavedPlan: (id: string) => void;
-  createNewPlan: (newPlan: Plan) => void;
+  createNewPlan: (plan: Plan) => void;
 }
 
 const PlanContext = createContext<PlanContextType | null>(null);
 
-// Default initial sample plan (neutral, realistic sample)
 const DEFAULT_SAMPLE_PLAN: Plan = SAMPLE_PLANS.wedding;
 
+function getInitialPlans(): { all: Plan[]; current: Plan } {
+  if (typeof window === 'undefined') {
+    return { all: [DEFAULT_SAMPLE_PLAN], current: DEFAULT_SAMPLE_PLAN };
+  }
+  const saved = loadAllPlans();
+  if (saved.length > 0 && saved[0]) {
+    return { all: saved, current: saved[0] };
+  }
+  savePlan(DEFAULT_SAMPLE_PLAN);
+  return { all: [DEFAULT_SAMPLE_PLAN], current: DEFAULT_SAMPLE_PLAN };
+}
+
 export function PlanProvider({ children }: { children: React.ReactNode }) {
-  const [allSavedPlans, setAllSavedPlans] = useState<Plan[]>(() => {
-    if (typeof window === 'undefined') return [DEFAULT_SAMPLE_PLAN];
-    const saved = loadAllPlans();
-    if (saved.length > 0) return saved;
-    savePlan(DEFAULT_SAMPLE_PLAN);
-    return [DEFAULT_SAMPLE_PLAN];
-  });
-
-  const [plan, setPlanState] = useState<Plan | null>(() => {
-    if (typeof window === 'undefined') return DEFAULT_SAMPLE_PLAN;
-    const saved = loadAllPlans();
-    if (saved.length > 0 && saved[0]) return saved[0];
-    savePlan(DEFAULT_SAMPLE_PLAN);
-    return DEFAULT_SAMPLE_PLAN;
-  });
-
+  const [initial] = useState(getInitialPlans);
+  const [allSavedPlans, setAllSavedPlans] = useState<Plan[]>(initial.all);
+  const [plan, setPlanState] = useState<Plan | null>(initial.current);
   const [scenarioPlan, setScenarioPlan] = useState<Plan | null>(null);
   const [activeTab, setActiveTab] = useState<PlanTab>('overview');
   const [isDemoMode, setIsDemoMode] = useState(false);
 
-  // History stack for Undo/Redo
-  const [history, setHistory] = useState<Plan[]>(() => {
-    if (typeof window === 'undefined') return [DEFAULT_SAMPLE_PLAN];
-    const saved = loadAllPlans();
-    if (saved.length > 0 && saved[0]) return [saved[0]];
-    return [DEFAULT_SAMPLE_PLAN];
-  });
-  const [historyIndex, setHistoryIndex] = useState<number>(0);
+  const history = usePlanHistory(initial.current);
 
-  // Query health endpoint for demo mode
   useEffect(() => {
     fetch('/api/health')
       .then((res) => res.json())
@@ -79,7 +73,6 @@ export function PlanProvider({ children }: { children: React.ReactNode }) {
       .catch(() => setIsDemoMode(true));
   }, []);
 
-  // Update HTML data-event and data-event-theme attributes to reflect theme
   useEffect(() => {
     if (plan?.eventType) {
       document.documentElement.setAttribute('data-event', plan.eventType);
@@ -94,29 +87,24 @@ export function PlanProvider({ children }: { children: React.ReactNode }) {
   const setPlan = useCallback((newPlan: Plan) => {
     setPlanState(newPlan);
     savePlan(newPlan);
-    setHistory((prev) => [...prev.slice(0, historyIndex + 1), newPlan]);
-    setHistoryIndex((prev) => prev + 1);
+    history.pushHistory(newPlan);
     refreshSavedPlans();
-  }, [historyIndex, refreshSavedPlans]);
+  }, [history, refreshSavedPlans]);
 
-  const updatePlan = useCallback(
-    (updater: (prev: Plan) => Plan) => {
-      setPlanState((current) => {
-        if (!current) return current;
-        const next = updater(current);
-        const updatedPlan: Plan = {
-          ...next,
-          updatedAt: new Date().toISOString(),
-        };
-        savePlan(updatedPlan);
-        setHistory((prev) => [...prev.slice(0, historyIndex + 1), updatedPlan]);
-        setHistoryIndex((prev) => prev + 1);
-        return updatedPlan;
-      });
-      refreshSavedPlans();
-    },
-    [historyIndex, refreshSavedPlans],
-  );
+  const updatePlan = useCallback((updater: (prev: Plan) => Plan) => {
+    setPlanState((current) => {
+      if (!current) return current;
+      const next = updater(current);
+      const updatedPlan: Plan = {
+        ...next,
+        updatedAt: new Date().toISOString(),
+      };
+      savePlan(updatedPlan);
+      history.pushHistory(updatedPlan);
+      return updatedPlan;
+    });
+    refreshSavedPlans();
+  }, [history, refreshSavedPlans]);
 
   const duplicatePlanForScenario = useCallback(() => {
     if (!plan) return;
@@ -139,45 +127,29 @@ export function PlanProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const undo = useCallback(() => {
-    if (historyIndex > 0) {
-      const prev = history[historyIndex - 1];
-      if (prev) {
-        setPlanState(prev);
-        savePlan(prev);
-        setHistoryIndex((i) => i - 1);
-      }
-    }
-  }, [history, historyIndex]);
+    history.undo(setPlanState);
+  }, [history]);
 
   const redo = useCallback(() => {
-    if (historyIndex < history.length - 1) {
-      const next = history[historyIndex + 1];
-      if (next) {
-        setPlanState(next);
-        savePlan(next);
-        setHistoryIndex((i) => i + 1);
-      }
-    }
-  }, [history, historyIndex]);
+    history.redo(setPlanState);
+  }, [history]);
 
   const loadSavedPlan = useCallback((id: string) => {
     const loaded = loadPlan(id);
     if (loaded) {
       setPlanState(loaded);
-      setHistory([loaded]);
-      setHistoryIndex(0);
+      history.resetHistory(loaded);
     }
-  }, []);
+  }, [history]);
 
   const createNewPlan = useCallback((newPlan: Plan) => {
     setPlanState(newPlan);
     savePlan(newPlan);
-    setHistory([newPlan]);
-    setHistoryIndex(0);
+    history.resetHistory(newPlan);
     setScenarioPlan(null);
     setActiveTab('overview');
     refreshSavedPlans();
-  }, [refreshSavedPlans]);
+  }, [history, refreshSavedPlans]);
 
   return (
     <PlanContext.Provider
@@ -191,8 +163,8 @@ export function PlanProvider({ children }: { children: React.ReactNode }) {
         duplicatePlanForScenario,
         updateScenarioPlan,
         clearScenarioPlan,
-        canUndo: historyIndex > 0,
-        canRedo: historyIndex < history.length - 1,
+        canUndo: history.canUndo,
+        canRedo: history.canRedo,
         undo,
         redo,
         isDemoMode,
